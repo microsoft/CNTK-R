@@ -15,7 +15,7 @@ for help setting up CNTK with Python.
 
 Then run the following to install CNTK's R package:
 
-    devtools::install_github("joeddav/CNTK/bindings/R") # will change to Microsoft/CNTK...
+    devtools::install_github("joeddav/CNTK-R")
 
 #### Usage
 
