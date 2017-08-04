@@ -64,7 +64,7 @@ PastValueWindow <- function(window_size, axis, go_backwards = FALSE, name='') {
 #' @export
 Recurrence <- function(step_function, go_backwards = FALSE, initial_state = 0,
 					   return_full_state = FALSE, name = '') {
-	cntk$layers$sequence$Recurrence(
+	cntk$layers$Recurrence(
 		step_function,
 		go_backwards = go_backwards,
 		initial_state = initial_state,

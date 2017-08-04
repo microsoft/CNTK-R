@@ -6,13 +6,7 @@ cntk <- NULL
 np <- NULL
 sys <- NULL
 type_map <- NULL
-
-to_int <- function(num) {
-	if (is.numeric(num)) {
-		return(as.integer(num))
-	}
-	num
-}
+to_int <- NULL
 
 .onLoad <- function(libname, pkgname) {
 	cntk <<- import('cntk', delay_load = TRUE)
@@ -27,5 +21,11 @@ to_int <- function(num) {
 			)[[type]])
 		}
 		type
+	}
+	to_int <<- function(num) {
+	  if (is.numeric(num)) {
+	    return(as.integer(num))
+	  }
+	  num
 	}
 }

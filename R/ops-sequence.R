@@ -92,7 +92,7 @@ seq_gather <- function(seq, condition, new_sequence_axis_typeinfo, name = '') {
 #' @export
 seq_input_variable <- function(shape, dtype = 'float32',
 							   needs_gradient = FALSE, is_sparse = FALSE,
-							   sequence_axis = CNTKAxis$default_dynamic_axis(),
+							   sequence_axis = cntk$axis$Axis$default_dynamic_axis(),
 							   name = '') {
 	cntk$ops$sequence$input_variable(
 		to_int(shape),
