@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>MinibatchSource — MinibatchSource • cntk</title>
+<title>Minibatch Source — MinibatchSource • cntk</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -98,7 +101,7 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>MinibatchSource</h1>
+    <h1>Minibatch Source</h1>
     </div>
 
     
@@ -109,10 +112,93 @@
   <span class='kw'>max_sweeps</span> <span class='kw'>=</span> <span class='no'>IO_INFINITELY_REPEAT</span>,
   <span class='kw'>randomization_window_in_chunks</span> <span class='kw'>=</span> <span class='no'>IO_DEFAULT_RANDOMIZATION_WINDOW_IN_CHUNKS</span>,
   <span class='kw'>randomization_window_in_samples</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>randomization_seed</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>trace_level</span> <span class='kw'>=</span> <span class='fu'>get_logging_trace_level</span>(),
+  <span class='kw'>trace_level</span> <span class='kw'>=</span> <span class='fu'><a href='get_logging_trace_level.html'>get_logging_trace_level</a></span>(),
   <span class='kw'>multithreaded_deserializer</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>frame_mode</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>truncation_length</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>randomize</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-        
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>deserializers</th>
+      <td><p>(deserializer or list) deserializers to be used in the
+composite reader</p></td>
+    </tr>
+    <tr>
+      <th>max_samples</th>
+      <td><p>(int, defaults to IO_INFINITELY_REPEAT) The maximum
+number of input samples (not ‘label samples’) the reader can produce. After
+this number has been reached, the reader returns empty minibatches on
+subsequent calls to next_minibatch(). max_samples and max_sweeps are
+mutually exclusive, an exception will be raised if both have non-default
+values.</p></td>
+    </tr>
+    <tr>
+      <th>max_sweeps</th>
+      <td><p>(int, defaults to IO_INFINITELY_REPEAT) The maximum number
+of of sweeps over the input dataset After this number has been reached, the
+reader returns empty minibatches on subsequent calls to func:next_minibatch.
+max_samples and max_sweeps are mutually exclusive, an exception will be
+raised if both have non-default values.</p></td>
+    </tr>
+    <tr>
+      <th>randomization_window_in_chunks</th>
+      <td><p>(int, defaults to
+IO_DEFAULT_RANDOMIZATION_WINDOW_IN_CHUNKS) size of the randomization window
+in chunks, non-zero value enables randomization.
+randomization_window_in_chunks and randomization_window_in_samples are
+mutually exclusive, an exception will be raised if both have non-zero
+values.</p></td>
+    </tr>
+    <tr>
+      <th>randomization_window_in_samples</th>
+      <td><p>(int, defaults to 0)  size of the
+randomization window in samples, non-zero value enables randomization.
+randomization_window_in_chunks and randomization_window_in_samples are
+mutually exclusive, an exception will be raised if both have non-zero
+values.</p></td>
+    </tr>
+    <tr>
+      <th>randomization_seed</th>
+      <td><p>(int, defaults to 0) Initial randomization seed
+value (incremented every sweep when the input data is re-randomized).</p></td>
+    </tr>
+    <tr>
+      <th>trace_level</th>
+      <td><p>(TraceLevel) the output verbosity level, defaults to the
+current logging verbosity level given by get_trace_level().</p></td>
+    </tr>
+    <tr>
+      <th>multithreaded_deserializer</th>
+      <td><p>(bool) specifies if the deserialization
+should be done on a single or multiple threads. Defaults to None, which is
+effectively “auto” (multhithreading is disabled unless ImageDeserializer is
+present in the deserializers list). False and True faithfully turn the
+multithreading off/on.</p></td>
+    </tr>
+    <tr>
+      <th>frame_mode</th>
+      <td><p>(bool) switches the frame mode on and off. If the frame
+mode is enabled the input data will be processed as individual frames
+ignoring all sequence information (this option cannot be used for BPTT, an
+exception will be raised if frame mode is enabled and the truncation length
+is non-zero).</p></td>
+    </tr>
+    <tr>
+      <th>truncation_length</th>
+      <td><p>(int) truncation length in samples, non-zero value
+enables the truncation (only applicable for BPTT, cannot be used in frame
+mode, an exception will be raised if frame mode is enabled and the
+truncation length is non-zero).</p></td>
+    </tr>
+    <tr>
+      <th>randomize</th>
+      <td><p>(bool) Enables or disables randomization; use
+randomization_window_in_chunks or randomization_window_in_samples to specify
+the randomization range</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>****** Attributes: ******</p>
@@ -133,6 +219,7 @@ mb_stream_infos(minibatch_source)</p>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
           </ul>

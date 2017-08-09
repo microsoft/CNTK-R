@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -120,7 +123,8 @@ deserializer, and certain keys are meaningless for certain deserializers.</p>
     </tr>
     <tr>
       <th>shape</th>
-      <td><p>integer defining the dimensions of the stream</p></td>
+      <td><p>- list of ints representing tensor shape integer defining the
+dimensions of the stream</p></td>
     </tr>
     <tr>
       <th>is_sparse</th>
@@ -132,7 +136,8 @@ deserializer, and certain keys are meaningless for certain deserializers.</p>
     </tr>
     <tr>
       <th>context</th>
-      <td><p>vector of length two defining whther reading in HTK data, (only supported by `HTKFeatureDeserializer`)</p></td>
+      <td><p>vector of length two defining whther reading in HTK data,
+(only supported by `HTKFeatureDeserializer`)</p></td>
     </tr>
     <tr>
       <th>scp</th>
@@ -144,7 +149,8 @@ deserializer, and certain keys are meaningless for certain deserializers.</p>
     </tr>
     <tr>
       <th>broadcast</th>
-      <td><p>logical for whether the streams should be broadcast to the whole sequence</p></td>
+      <td><p>logical for whether the streams should be broadcast to the
+whole sequence</p></td>
     </tr>
     <tr>
       <th>defines_mb_size</th>

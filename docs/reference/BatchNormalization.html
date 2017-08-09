@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -108,7 +111,25 @@
     <pre class="usage"><span class='fu'>BatchNormalization</span>(<span class='kw'>map_rank</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>init_scale</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>normalization_time_constant</span> <span class='kw'>=</span> <span class='fl'>5000</span>, <span class='kw'>blend_time_constant</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>epsilon</span> <span class='kw'>=</span> <span class='fl'>1e-05</span>, <span class='kw'>use_cntk_engine</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>""</span>)</pre>
-        
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>epsilon</th>
+      <td><p>(float, default 0.00001) - added to avoid division by 0</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>string (optional) the name of the Function instance in the network</p></td>
+    </tr>
+    <tr>
+      <th>init</th>
+      <td><p>(scalar or matrix or initializer, defaults to
+init_glorot_uniform()) – initial value of weights W_scale</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Like Convolution(), AveragePooling() processes items arranged on an
@@ -124,6 +145,7 @@ E.g. for 2D pooling, filter_shape should be a tuple of two integers, such as
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
           </ul>

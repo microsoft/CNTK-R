@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -116,11 +119,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>parameters</th>
-      <td><p>list of network parameters to tune.</p></td>
+      <td><p>– list of network parameters list of network parameters to tune.</p></td>
     </tr>
     <tr>
       <th>lr</th>
-      <td><p>output of <code>learning_rate_schedule</code></p></td>
+      <td><p>(output of learning_rate_schedule()) – learning rate schedule output of <code>learning_rate_schedule</code></p></td>
     </tr>
     <tr>
       <th>momentum</th>
@@ -132,27 +135,27 @@
     </tr>
     <tr>
       <th>l1_regularization_weight</th>
-      <td><p>double of l1 regularization</p></td>
+      <td><p>(float, optional) – the L1 regularization weight per sample, defaults to 0.0(float, optional) double of l1 regularization</p></td>
     </tr>
     <tr>
       <th>l2_regularization_weight</th>
-      <td><p>double of l2 regularization</p></td>
+      <td><p>(float, optional) – the L2 regularization weight per sample, defaults to 0.0 double of l2 regularization</p></td>
     </tr>
     <tr>
       <th>gaussian_noise_injection_std_dev</th>
-      <td><p>double of noise injection</p></td>
+      <td><p>(float, optional) – the standard deviation of the Gaussian noise added to parameters post update, defaults to 0.0 double of noise injection</p></td>
     </tr>
     <tr>
       <th>gradient_clipping_threshold_per_sample</th>
-      <td><p>double of gradient clipping threshold per sample</p></td>
+      <td><p>(float, optional) – clipping threshold per sample, defaults to infinity. double of gradient clipping threshold per sample</p></td>
     </tr>
     <tr>
       <th>gradient_clipping_with_truncation</th>
-      <td><p>logical for gradient clipping with truncation</p></td>
+      <td><p>(bool, default True) – use gradient clipping with truncation logical for gradient clipping with truncation</p></td>
     </tr>
     <tr>
       <th>use_mean_gradient</th>
-      <td><p>logical use averaged gradient as input to learner.</p></td>
+      <td><p>(bool, default False) – use averaged gradient as input to learner. Defaults to the value returned by default_use_mean_gradient_value(). logical use averaged gradient as input to learner.</p></td>
     </tr>
     </table>
     

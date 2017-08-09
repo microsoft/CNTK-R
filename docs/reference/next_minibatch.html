@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>next_minibatch — next_minibatch • cntk</title>
+<title>Next Minibatch — next_minibatch • cntk</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -98,22 +101,71 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>next_minibatch</h1>
+    <h1>Next Minibatch</h1>
     </div>
 
     
-    <p>next_minibatch</p>
+    <p>Reads a minibatch that contains data for all input streams. The minibatch
+size is specified in terms of #samples and/or #sequences for the primary
+input stream; value of 0 for #samples/#sequences means unspecified. In case
+the size is specified in terms of both #sequences and #samples, the smaller
+of the 2 is taken. An empty map is returned when the MinibatchSource has no
+more data to return.</p>
     
 
     <pre class="usage"><span class='fu'>next_minibatch</span>(<span class='no'>minibatch_source</span>, <span class='no'>minibatch_size_in_samples</span>, <span class='kw'>input_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>device</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>num_data_partitions</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>partition_index</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-        
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>minibatch_source</th>
+      <td><p>(MinibatchSource or MinibatchSourceFromData) source
+for minibatch</p></td>
+    </tr>
+    <tr>
+      <th>minibatch_size_in_samples</th>
+      <td><p>number of samples to retrieve for the next
+minibatch. Must be &gt; 0.</p></td>
+    </tr>
+    <tr>
+      <th>input_map</th>
+      <td><p>mapping of Variable to StreamInformation which will be used
+to convert the returned data.</p></td>
+    </tr>
+    <tr>
+      <th>device</th>
+      <td><p>- instance of DeviceDescriptor</p></td>
+    </tr>
+    <tr>
+      <th>num_data_partitions</th>
+      <td><p>Used for distributed training, indicates into how
+many partitions the source should split the data.</p></td>
+    </tr>
+    <tr>
+      <th>partition_index</th>
+      <td><p>Used for distributed training, indicates data from
+which partition to take.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>(MinibatchData) mapping of StreamInformation to MinibatchData if
+input_map was not specified. Otherwise, the returned value will be a mapping
+of Variable to class:MinibatchData. When the maximum number of
+epochs/samples is exhausted, the return value is an empty dict.</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>

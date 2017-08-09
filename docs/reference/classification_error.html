@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -102,10 +105,7 @@
     </div>
 
     
-    <p>This operation computes the classification error.
-It finds the index of the highest value in the output_vector and compares it to the actual ground truth label (the index of the hot bit in the target vector).
-The result is a scalar (i.e., one by one matrix). This is often used as an evaluation criterion.
-It cannot be used as a training criterion though since the gradient is not defined for it.</p>
+    <p>This operation computes the classification error.</p>
     
 
     <pre class="usage"><span class='fu'>classification_error</span>(<span class='no'>output_vector</span>, <span class='no'>target_vector</span>, <span class='kw'>axis</span> <span class='kw'>=</span> -<span class='fl'>1</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>1</span>,
@@ -136,6 +136,16 @@ It cannot be used as a training criterion though since the gradient is not defin
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>It finds the index of the highest value in the output_vector and compares it
+to the actual ground truth label (the index of the hot bit in the target
+vector).</p>
+<p>The result is a scalar (i.e., one by one matrix). This is often used as an
+evaluation criterion.</p>
+<p>It cannot be used as a training criterion though since the gradient is not
+defined for it.</p>
+    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://www.cntk.ai/pythondocs/cntk.metrics.html#cntk.metrics.classification_error'>https://www.cntk.ai/pythondocs/cntk.metrics.html#cntk.metrics.classification_error</a></p>
@@ -147,6 +157,8 @@ It cannot be used as a training criterion though since the gradient is not defin
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#details">Details</a></li>
+
       <li><a href="#references">References</a></li>
           </ul>
 

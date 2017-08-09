@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Higher-Order Wrapper for Layer Definitions — Sequential • cntk</title>
+<title>Sequential Higher-Order Wrapper for Layer Definitions — Sequential • cntk</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -98,11 +101,12 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Higher-Order Wrapper for Layer Definitions</h1>
+    <h1>Sequential Higher-Order Wrapper for Layer Definitions</h1>
     </div>
 
     
-    <p>Layer factory function to create a composite that applies a sequence of layers (or any functions) onto an input.
+    <p>Layer factory function to create a composite that applies a sequence of
+layers (or any functions) onto an input.
 Sequential `([F, G, H])(x)` means the same as `H(G(F(x)))`.</p>
     
 
@@ -119,7 +123,8 @@ Sequential `([F, G, H])(x)` means the same as `H(G(F(x)))`.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A function that accepts one argument and applies the given functions one after another.</p>
+    <p>A function that accepts one argument and applies the given
+functions one after another.</p>
     
 
   </div>

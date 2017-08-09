@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -106,13 +109,40 @@
 implementing custom minibatch source through UserMinibatchSource.</p>
     
 
-    <pre class="usage"><span class='fu'>StreamInformation</span>(<span class='no'>name</span>, <span class='no'>stream_id</span>, <span class='no'>storage_format</span>, <span class='no'>shape</span>)</pre>
-        
+    <pre class="usage"><span class='fu'>StreamInformation</span>(<span class='no'>name</span>, <span class='no'>stream_id</span>, <span class='no'>storage_format</span>, <span class='no'>dtype</span>, <span class='no'>shape</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>name</th>
+      <td><p>string (optional) the name of the Function instance in the
+network</p></td>
+    </tr>
+    <tr>
+      <th>stream_id</th>
+      <td><p>(int) unique ID of the stream</p></td>
+    </tr>
+    <tr>
+      <th>storage_format</th>
+      <td><p>"dense" or "sparse"</p></td>
+    </tr>
+    <tr>
+      <th>dtype</th>
+      <td><p>data type to be used ("float32", "float64", or "auto")</p></td>
+    </tr>
+    <tr>
+      <th>shape</th>
+      <td><p>list of ints representing tensor shape</p></td>
+    </tr>
+    </table>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
   </div>

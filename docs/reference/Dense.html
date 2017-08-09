@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -107,10 +110,41 @@ layer of the form activation(input @ W + b) with weights W and bias b, and
 activation and b being optional. shape may describe a tensor as well.</p>
     
 
-    <pre class="usage"><span class='fu'>Dense</span>(<span class='no'>shape</span>, <span class='kw'>activation</span> <span class='kw'>=</span> <span class='no'>activation_identity</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='fu'>init_glorot_uniform</span>(),
+    <pre class="usage"><span class='fu'>Dense</span>(<span class='no'>shape</span>, <span class='kw'>activation</span> <span class='kw'>=</span> <span class='no'>activation_identity</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='fu'><a href='init_glorot_uniform.html'>init_glorot_uniform</a></span>(),
   <span class='kw'>input_rank</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>map_rank</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>bias</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>init_bias</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>""</span>)</pre>
-        
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>shape</th>
+      <td><p>- list of ints representing tensor shape</p></td>
+    </tr>
+    <tr>
+      <th>activation</th>
+      <td><p>(Function) - optional activation Function</p></td>
+    </tr>
+    <tr>
+      <th>init</th>
+      <td><p>(scalar or matrix or initializer, defaults to
+init_glorot_uniform()) – initial value of weights W</p></td>
+    </tr>
+    <tr>
+      <th>bias</th>
+      <td><p>(bool) – whether to include bias</p></td>
+    </tr>
+    <tr>
+      <th>init_bias</th>
+      <td><p>(scalar or matrix or initializer, defaults to 0) – initial
+value of weights b</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>string (optional) the name of the Function instance in the network</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>A Dense layer instance owns its parameter tensors W and b, and exposes them
@@ -132,6 +166,7 @@ above.</p>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
           </ul>

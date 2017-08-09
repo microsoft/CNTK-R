@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -106,8 +109,21 @@
 used to feed the data into a TrainingSession.</p>
     
 
-    <pre class="usage"><span class='fu'>MinibatchSourceFromData</span>(<span class='no'>data_streams</span>, <span class='kw'>max_samples</span> <span class='kw'>=</span> <span class='fl'>1844674407379551488</span>)</pre>
-        
+    <pre class="usage"><span class='fu'>MinibatchSourceFromData</span>(<span class='no'>data_streams</span>, <span class='kw'>max_samples</span> <span class='kw'>=</span> <span class='no'>IO_INFINITELY_REPEAT</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data_streams</th>
+      <td><p>data streams</p></td>
+    </tr>
+    <tr>
+      <th>max_samples</th>
+      <td><p>max samples</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Use this if your data is small enough to be loaded into RAM in its entirety,
@@ -132,6 +148,7 @@ MinibatchSourceFromData, please pass a copy.</p>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
 

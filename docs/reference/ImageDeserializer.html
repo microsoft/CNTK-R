@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -107,7 +110,22 @@ a file.</p>
     
 
     <pre class="usage"><span class='fu'>ImageDeserializer</span>(<span class='no'>filename</span>, <span class='no'>streams</span>)</pre>
-        
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>filename</th>
+      <td><p>(str) file name of the input data file</p></td>
+    </tr>
+    <tr>
+      <th>streams</th>
+      <td><p>any dictionary-like object that contains a mapping from
+stream names to StreamDef objects. Each StreamDef object configures a label
+stream.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Form: `&lt;full path to image&gt; &lt;tab&gt; &lt;numerical label (0-based class id)&gt;` or
@@ -118,6 +136,7 @@ a file.</p>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
           </ul>

@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -107,7 +110,24 @@ algorithm, derive from this class and override the <code>update()</code>.</p>
     
 
     <pre class="usage"><span class='fu'>UserLearner</span>(<span class='no'>parameters</span>, <span class='no'>lr_schedule</span>, <span class='kw'>as_matrix</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-        
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>parameters</th>
+      <td><p>– list of network parameters</p></td>
+    </tr>
+    <tr>
+      <th>as_matrix</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>lr</th>
+      <td><p>(output of learning_rate_schedule()) – learning rate schedule_schedule</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Certain optimizers (such as AdaGrad) require additional storage. This can be
@@ -122,6 +142,7 @@ allocated and initialized during construction.</p>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
 

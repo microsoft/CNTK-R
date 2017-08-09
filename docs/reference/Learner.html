@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -109,17 +112,18 @@ parameter values using first order gradients. To instantiate a concrete
 learner, use the factory methods in this module.</p>
     
 
-    <pre class="usage"><span class='fu'>Learner</span>(<span class='no'>parameters</span>, <span class='no'>learningRateSchedule</span>)</pre>
+    <pre class="usage"><span class='fu'>Learner</span>(<span class='no'>parameters</span>, <span class='no'>learning_rate_schedule</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>parameters</th>
-      <td><p>list of parameter associated with this learner</p></td>
+      <td><p>– list of network parameters list of parameter associated
+with this learner</p></td>
     </tr>
     <tr>
-      <th>learningRateSchedule</th>
+      <th>learning_rate_schedule</th>
       <td><p>get_learning_rate(learner)</p></td>
     </tr>
     </table>

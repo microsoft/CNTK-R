@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -108,14 +111,40 @@ accepts the previous state as its first argument, and outputs its new state.</p>
     
 
     <pre class="usage"><span class='fu'>GRU</span>(<span class='no'>shape</span>, <span class='kw'>cell_shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>activation</span> <span class='kw'>=</span> <span class='no'>op_tanh</span>,
-  <span class='kw'>init</span> <span class='kw'>=</span> <span class='fu'>init_glorot_uniform</span>(), <span class='kw'>init_bias</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>init</span> <span class='kw'>=</span> <span class='fu'><a href='init_glorot_uniform.html'>init_glorot_uniform</a></span>(), <span class='kw'>init_bias</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>enable_self_stabilization</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>""</span>)</pre>
-        
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>shape</th>
+      <td><p>- list of ints representing tensor shape</p></td>
+    </tr>
+    <tr>
+      <th>activation</th>
+      <td><p>(Function) - optional activation Function</p></td>
+    </tr>
+    <tr>
+      <th>init</th>
+      <td><p>(scalar or matrix or initializer, defaults to init_glorot_uniform()) – initial value of weights W</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>string (optional) the name of the Function instance in the network</p></td>
+    </tr>
+    <tr>
+      <th>init</th>
+      <td><p>(scalar or matrix or initializer, defaults to init_glorot_uniform()) – initial value of weights W_bias</p></td>
+    </tr>
+    </table>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
   </div>

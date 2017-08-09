@@ -68,6 +68,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -105,15 +108,16 @@
     <p>It creates an input in the network: a place where data, such as features and labels, should be provided.</p>
     
 
-    <pre class="usage"><span class='fu'>op_input_variable</span>(<span class='no'>shape</span>, <span class='kw'>needs_gradient</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>is_sparse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>dynamic_axes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'><a href='get_default_batch_axis.html'>get_default_batch_axis</a></span>()), <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>""</span>)</pre>
+    <pre class="usage"><span class='fu'>op_input_variable</span>(<span class='no'>shape</span>, <span class='kw'>dtype</span> <span class='kw'>=</span> <span class='st'>"float32"</span>, <span class='kw'>needs_gradient</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>is_sparse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>dynamic_axes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'><a href='get_default_batch_axis.html'>get_default_batch_axis</a></span>()),
+  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>""</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>shape</th>
-      <td><p>integer vector for dimensions of input tensor</p></td>
+      <td><p>- list of ints representing tensor shape integer vector for dimensions of input tensor</p></td>
     </tr>
     <tr>
       <th>needs_gradient</th>
