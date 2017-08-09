@@ -15,7 +15,7 @@ output and computes the Normalized Discounted Cumulative Gain (NDCG) at 1
 for each group. Concretely, the NDCG at 1 is:
 }
 \details{
-\(\mathrm{NDCG_1} = \frac{gain_{(1)}}{\max_i gain_i}\)
+$\mathrm{NDCG_1} = \frac{gain_{(1)}}{\max_i gain_i}$
 
 where gain(1)gain(1) means the gain of the first ranked sample.
 

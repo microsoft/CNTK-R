@@ -856,9 +856,9 @@ op_param_relu <- function(alpha, x, name = '') {
 #' @param shape - list of ints representing tensor shape
 #' @param init (scalar or matrix or initializer, defaults to
 #' init_glorot_uniform()) – initial value of weights W
-#' @param dtype - data type to be used ("float32", "float64", or "auto")
-#' @param device - instance of DeviceDescriptor
-#' @param name (str) the name of the Function instance in the network
+#' @param dtype character for data type to be used ("float32", "float64", or "auto")
+#' @param device character of instance of DeviceDescriptor
+#' @param name character of the name of the Function instance in the network
 #'
 #' @export
 op_parameter <- function(shape = NULL, init = NULL, dtype = "auto",

@@ -89,7 +89,7 @@ edit_distance_error <- function(input_a, input_b, subPen = 1, delPen = 1,
 #' output and computes the Normalized Discounted Cumulative Gain (NDCG) at 1
 #' for each group. Concretely, the NDCG at 1 is:
 #'
-#' \(\mathrm{NDCG_1} = \frac{gain_{(1)}}{\max_i gain_i}\)
+#' $\mathrm{NDCG_1} = \frac{gain_{(1)}}{\max_i gain_i}$
 #'
 #' where gain(1)gain(1) means the gain of the first ranked sample.
 #'

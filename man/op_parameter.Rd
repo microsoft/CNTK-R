@@ -13,11 +13,11 @@ op_parameter(shape = NULL, init = NULL, dtype = "auto", device = NULL,
 \item{init}{(scalar or matrix or initializer, defaults to
 init_glorot_uniform()) – initial value of weights W}
 
-\item{dtype}{- data type to be used ("float32", "float64", or "auto")}
+\item{dtype}{character for data type to be used ("float32", "float64", or "auto")}
 
-\item{device}{- instance of DeviceDescriptor}
+\item{device}{character of instance of DeviceDescriptor}
 
-\item{name}{(str) the name of the Function instance in the network}
+\item{name}{character of the name of the Function instance in the network}
 }
 \description{
 Creates a parameter tensor
