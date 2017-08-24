@@ -12,5 +12,6 @@ visualize_network <- function(model) {
 	png_file <- tempfile(fileext = ".png")
 	cntk$logging$graph$plot(model, png_file)
 	img <- png::readPNG(png_file)
+	plot.new()
 	grid::grid.raster(img)
 }

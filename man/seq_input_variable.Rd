@@ -5,7 +5,7 @@
 \title{Sequence Network Input Variable}
 \usage{
 seq_input_variable(shape, dtype = "float32", needs_gradient = FALSE,
-  is_sparse = FALSE, sequence_axis = CNTKAxis$default_dynamic_axis(),
+  is_sparse = FALSE, sequence_axis = cntk$axis$Axis$default_dynamic_axis(),
   name = "")
 }
 \arguments{
