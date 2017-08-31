@@ -1,5 +1,7 @@
 # R Interface to Microsoft Cognitive Toolkit
 
+Please take a look at the package website [microsoft.github.io/CNTK-R](https://microsoft.github.io/CNTK-R//index.html) for complete documentation.
+
 An R package for CNTK using Reticulate to bind to Python interface. Since it
 binds directly to Python, the R interface can perform any operation the Python
 bindings can, including running on the GPU. See the
