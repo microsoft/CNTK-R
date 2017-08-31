@@ -3,10 +3,10 @@
 An R package for CNTK using Reticulate to bind to Python interface. Since it
 binds directly to Python, the R interface can perform any operation the Python
 bindings can, including running on the GPU. See the
-[example notebook](cifar10-example.ipynb) to see a basic example of training
+[CIFAR-10 image classification vignette](https://microsoft.github.io/CNTK-R//articles/cifar10_example.html) to see a basic example of training
 and eval of image classification the CIFAR-10 dataset.
 
-#### Installation
+## Installation
 
 To use CNTK with R you'll need to have Python with CNTK for Python already
 installed on your machine. See
@@ -17,7 +17,7 @@ Then run the following to install CNTK's R package:
 
     devtools::install_github("Microsoft/CNTK-R")
 
-#### Usage
+## Usage
 
 Documentation is still in the process, but the R package closely follows the
 CNTK Python interface where possible
