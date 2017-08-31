@@ -61,7 +61,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/Microsoft/CNTK">
+  <a href="https://github.com/Microsoft/CNTK-R">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -81,16 +81,18 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#r-interface-to-microsoft-cognitive-toolkit" class="anchor"></a>R Interface to Microsoft Cognitive Toolkit</h1></div>
 
-<div id="installation" class="section level4">
-<h4 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h4>
-<p>To use CNTK with R you’ll need to have Python with CNTK for Python already installed on your machine. See <a href="https://docs.microsoft.com/en-us/cognitive-toolkit/Setup-CNTK-on-your-machine">this guide</a> for help setting up CNTK with Python.</p>
+<p><code>CNTK-R</code> is an R package for CNTK using <a href="https://github.com/rstudio/reticulate">reticulate</a> to bind to Python interface. Since it binds directly to Python, the R interface can perform any operation the Python bindings can, including running on the GPU. See the <a href="https://microsoft.github.io/CNTK-R//articles/cifar10_example.html">CIFAR-10 image classification vignette</a> to see a basic example of training and eval of image classification the CIFAR-10 dataset.</p>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>To use CNTK with R you’ll need to have the appropriate Python wheel for your system already installed. See <a href="https://docs.microsoft.com/en-us/cognitive-toolkit/Setup-CNTK-on-your-machine">CNTK’s documentation</a> for help setting up CNTK’s Python wheel on your system.</p>
 <p>Then run the following to install CNTK’s R package:</p>
 <div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"Microsoft/CNTK-R"</span>)</code></pre></div>
+<p>You can also take a look at our article on <a href="https://microsoft.github.io/CNTK-R//articles/installation.html">setting up CNTK and CNTK-R on your machine</a>.</p>
 </div>
-<div id="usage" class="section level4">
-<h4 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h4>
+<div id="usage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#usage" class="anchor"></a>Usage</h2>
 <p>Documentation is still in the process, but the R package closely follows the CNTK Python interface where possible (<a href="https://www.cntk.ai/pythondocs/index.html">Python docs</a>). Here’s the basic rundown of the differences:</p>
 <ol>
 <li>Properties are the same as in Python, and are accessed using the dollar sign ($) syntax:</li>
@@ -117,29 +119,29 @@ learner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">
   <div class="col-md-3" id="sidebar">
     <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/Microsoft/CNTK">https://​github.com/​Microsoft/​CNTK</a>
+<li>Browse source code at <br><a href="https://github.com/Microsoft/CNTK-R">https://​github.com/​Microsoft/​CNTK-R</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/Microsoft/CNTK/issues">https://​github.com/​Microsoft/​CNTK/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/Microsoft/CNTK-R/issues">https://​github.com/​Microsoft/​CNTK-R/​issues</a>
 </li>
 </ul>
 <h2>License</h2>
 <p><a href="https://opensource.org/licenses/mit-license.php">MIT</a></p>
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Joe Davison <br><small class="roles"> Author, maintainer </small> </li>
-<li>Ali Zaidi <br><small class="roles"> Author </small> </li>
-<li>Microsoft <br><small class="roles"> Copyright holder, funder </small> </li>
+<li>Ali Zaidi <br><small class="roles"> Author, maintainer </small> </li>
+<li>Joe Davison <br><small class="roles"> Author </small> </li>
+<li>Microsoft <br><small class="roles"> Copyright holder, funder </small> </li>
 </ul>
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="cifar10-example.ipynb">example notebook</a></li>
+<li><a href="https://microsoft.github.io/CNTK-R//index.html">microsoft.github.io/CNTK-R</a></li>
 </ul>
 </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Joe Davison, Ali Zaidi, Microsoft.</p>
+  <p>Developed by Ali Zaidi, Joe Davison, Microsoft.</p>
 </div>
 
 <div class="pkgdown">

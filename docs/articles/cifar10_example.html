@@ -45,6 +45,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -58,7 +61,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/Microsoft/CNTK">
+  <a href="https://github.com/Microsoft/CNTK-R">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -77,7 +80,7 @@
     <div class="page-header toc-ignore">
       <h1>CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</h1>
             
-            <h4 class="date">2017-07-21</h4>
+            <h4 class="date">2017-08-31</h4>
           </div>
 
     
@@ -148,12 +151,12 @@ num_output_classes &lt;-<span class="st"> </span><span class="dv">10</span></cod
 label_var &lt;-<span class="st"> </span><span class="kw"><a href="../reference/op_input_variable.html">op_input_variable</a></span>(num_output_classes, 
                                <span class="dt">name =</span> <span class="st">"label"</span>)</code></pre></div>
 <p>We will also normalize the input variables:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_remove_mean &lt;-<span class="st"> </span><span class="kw">op_minus</span>(input_var, <span class="kw">op_constant</span>(<span class="dv">128</span>))
-normalized_input &lt;-<span class="st"> </span><span class="kw">op_element_times</span>(<span class="kw">op_constant</span>(<span class="fl">0.00390625</span>), input_remove_mean)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_remove_mean &lt;-<span class="st"> </span><span class="kw"><a href="../reference/op_minus.html">op_minus</a></span>(input_var, <span class="kw"><a href="../reference/op_constant.html">op_constant</a></span>(<span class="dv">128</span>))
+normalized_input &lt;-<span class="st"> </span><span class="kw"><a href="../reference/op_element_times.html">op_element_times</a></span>(<span class="kw"><a href="../reference/op_constant.html">op_constant</a></span>(<span class="fl">0.00390625</span>), input_remove_mean)</code></pre></div>
 <p>Now we are ready to define our network architecture. The functions we use are all part of the CNTK <a href="https://www.cntk.ai/pythondocs/layerref.html">Layers</a> library. Please refer to those Python docs for a complete reference about these functions.</p>
 <p>In our case, we are going to define a convolutional neural network with four convolutional layers and two max-pooling layers.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Sequential.html">Sequential</a></span>(
-    <span class="kw">For</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="cf">function</span>() { 
+    <span class="kw"><a href="../reference/For.html">For</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="cf">function</span>() { 
         <span class="kw">c</span>(
             <span class="kw"><a href="../reference/Convolution2D.html">Convolution2D</a></span>(<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">3</span>), <span class="dv">64</span>, op_relu, <span class="dt">pad =</span> <span class="ot">TRUE</span>),
             <span class="kw"><a href="../reference/Convolution2D.html">Convolution2D</a></span>(<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">3</span>), <span class="dv">64</span>, op_relu, <span class="dt">pad =</span> <span class="ot">TRUE</span>),
@@ -192,8 +195,8 @@ l2_reg_weight &lt;-<span class="st"> </span><span class="fl">0.002</span></code>
 <p>We can now define our training algorithm:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">learner &lt;-<span class="st"> </span><span class="kw"><a href="../reference/learner_momentum_sgd.html">learner_momentum_sgd</a></span>(z<span class="op">$</span>parameters, lr_schedule, mm_schedule,
                                 <span class="dt">l2_regularization_weight =</span> l2_reg_weight)
-progress_printer &lt;-<span class="st"> </span><span class="kw">ProgressPrinter</span>(<span class="dt">tag =</span> <span class="st">'Training'</span>, <span class="dt">num_epochs =</span> max_epochs)
-trainer &lt;-<span class="st"> </span><span class="kw">Trainer</span>(z, <span class="kw">c</span>(loss, metric), learner, progress_printer)</code></pre></div>
+progress_printer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ProgressPrinter.html">ProgressPrinter</a></span>(<span class="dt">tag =</span> <span class="st">'Training'</span>, <span class="dt">num_epochs =</span> max_epochs)
+trainer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Trainer.html">Trainer</a></span>(z, <span class="kw">c</span>(loss, metric), learner, progress_printer)</code></pre></div>
 <p>Create mapping from features to data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_map =<span class="st"> </span><span class="kw">list</span>(
   <span class="st">"input"</span> =<span class="st"> </span>reader_train<span class="op">$</span>streams<span class="op">$</span>features,
@@ -206,12 +209,12 @@ trainer &lt;-<span class="st"> </span><span class="kw">Trainer</span>(z, <span c
     <span class="cf">while</span> (sample_count <span class="op">&lt;</span><span class="st"> </span>epoch_size) {
         current_minibatch &lt;-<span class="st"> </span><span class="kw">min</span>(minibatch_size, epoch_size <span class="op">-</span><span class="st"> </span>sample_count)
         data &lt;-<span class="st"> </span>reader_train <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(current_minibatch, <span class="dt">input_map =</span> input_map)
-        result &lt;-<span class="st"> </span>trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">test_minibatch</span>(data)
+        result &lt;-<span class="st"> </span>trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/test_minibatch.html">test_minibatch</a></span>(data)
         loss_over_time &lt;-<span class="st"> </span><span class="kw">c</span>(loss_over_time, result)
-        trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">train_minibatch</span>(data)
+        trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/train_minibatch.html">train_minibatch</a></span>(data)
         sample_count &lt;-<span class="st"> </span>sample_count <span class="op">+</span><span class="st"> </span>trainer<span class="op">$</span>previous_minibatch_sample_count
     }
-    <span class="kw">summarize_training_progress</span>(trainer)
+    <span class="kw"><a href="../reference/summarize_training_progress.html">summarize_training_progress</a></span>(trainer)
 }</code></pre></div>
 <p>We can visualize our training loss:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
@@ -244,7 +247,7 @@ minibatch_index &lt;-<span class="st"> </span><span class="dv">0</span></code></
 <span class="cf">while</span> (sample_count <span class="op">&lt;</span><span class="st"> </span>epoch_size) {
     current_minibatch &lt;-<span class="st"> </span><span class="kw">min</span>(minibatch_size, epoch_size <span class="op">-</span><span class="st"> </span>sample_count)
     data &lt;-<span class="st"> </span>reader_test <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(current_minibatch, <span class="dt">input_map =</span> input_map)
-    metric_numer &lt;-<span class="st">  </span>metric_numer <span class="op">+</span><span class="st"> </span>trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">test_minibatch</span>(data) <span class="op">*</span><span class="st"> </span>current_minibatch
+    metric_numer &lt;-<span class="st">  </span>metric_numer <span class="op">+</span><span class="st"> </span>trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/test_minibatch.html">test_minibatch</a></span>(data) <span class="op">*</span><span class="st"> </span>current_minibatch
     metric_denom &lt;-<span class="st">  </span>metric_denom <span class="op">+</span><span class="st"> </span>current_minibatch
     sample_count &lt;-<span class="st">  </span>sample_count <span class="op">+</span><span class="st"> </span>data<span class="op">$</span>label<span class="op">$</span>num_samples
     minibatch_index =<span class="st"> </span>minibatch_index <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
@@ -276,7 +279,7 @@ minibatch_index &lt;-<span class="st"> </span><span class="dv">0</span></code></
 
 
       <footer><div class="copyright">
-  <p>Developed by Joe Davison, Ali Zaidi, Microsoft.</p>
+  <p>Developed by Ali Zaidi, Joe Davison, Microsoft.</p>
 </div>
 
 <div class="pkgdown">

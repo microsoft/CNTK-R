@@ -45,6 +45,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/CharacterLM.html">CharacterLM</a>
+    </li>
+    <li>
       <a href="../articles/cifar10_example.html">CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</a>
     </li>
     <li>
@@ -58,7 +61,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/Microsoft/CNTK">
+  <a href="https://github.com/Microsoft/CNTK-R">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -77,7 +80,7 @@
     <div class="page-header toc-ignore">
       <h1>Convolutional Neural Netowrks with MNIST</h1>
             
-            <h4 class="date">2017-07-21</h4>
+            <h4 class="date">2017-08-31</h4>
           </div>
 
     
@@ -126,7 +129,7 @@ y &lt;-<span class="st"> </span><span class="kw"><a href="../reference/op_input_
 <a href="#create-model" class="anchor"></a>Create model</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_model &lt;-<span class="st"> </span><span class="cf">function</span>(features) {
   
-  h &lt;-<span class="st"> </span><span class="kw">op_element_times</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">255</span>, features)
+  h &lt;-<span class="st"> </span><span class="kw"><a href="../reference/op_element_times.html">op_element_times</a></span>(<span class="dv">1</span><span class="op">/</span><span class="dv">255</span>, features)
   h &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Convolution2D.html">Convolution2D</a></span>(<span class="dt">filter_shape =</span> <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">5</span>),
                      <span class="dt">num_filters =</span> <span class="dv">8</span>,
                      <span class="dt">strides =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),
@@ -200,7 +203,7 @@ print_training_progress &lt;-<span class="st"> </span><span class="cf">function<
   lr_schedule &lt;-<span class="st"> </span><span class="kw">learning_rate_schedule</span>(learning_rate, <span class="kw">UnitType</span>(<span class="st">"minibatch"</span>))
   
   learner &lt;-<span class="st"> </span><span class="kw">learner_sgd</span>(z<span class="op">$</span>parameters, lr_schedule)
-  trainer &lt;-<span class="st"> </span><span class="kw">Trainer</span>(z, loss_error, learner)
+  trainer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Trainer.html">Trainer</a></span>(z, loss_error, learner)
   
   minibatch_size &lt;-<span class="st"> </span><span class="dv">64</span>
   num_samples_per_sweep &lt;-<span class="st"> </span><span class="dv">6</span><span class="op">*</span><span class="dv">10</span><span class="op">^</span><span class="dv">4</span>
@@ -217,7 +220,7 @@ print_training_progress &lt;-<span class="st"> </span><span class="cf">function<
     
     data &lt;-<span class="st"> </span>train_reader <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(minibatch_size, 
                                             <span class="dt">input_map =</span> input_map)
-    trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">train_minibatch</span>(data)
+    trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/train_minibatch.html">train_minibatch</a></span>(data)
     <span class="kw">print_training_progress</span>(trainer, i, training_progress_output_freq, <span class="dt">verbose =</span> <span class="dv">1</span>)
     
   }
@@ -239,7 +242,7 @@ print_training_progress &lt;-<span class="st"> </span><span class="cf">function<
   <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ceiling</span>(num_minibatches_to_test)) {
     
     data &lt;-<span class="st"> </span>test_reader <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(test_minibatch_size, <span class="dt">input_map =</span> test_input_map)
-    eval_error &lt;-<span class="st"> </span>trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">test_minibatch</span>(data)
+    eval_error &lt;-<span class="st"> </span>trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/test_minibatch.html">test_minibatch</a></span>(data)
     test_result &lt;-<span class="st"> </span>test_result <span class="op">+</span><span class="st"> </span>eval_error
     
   }
@@ -281,7 +284,7 @@ print_training_progress &lt;-<span class="st"> </span><span class="cf">function<
 
 
       <footer><div class="copyright">
-  <p>Developed by Joe Davison, Ali Zaidi, Microsoft.</p>
+  <p>Developed by Ali Zaidi, Joe Davison, Microsoft.</p>
 </div>
 
 <div class="pkgdown">

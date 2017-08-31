@@ -9,6 +9,12 @@ vignette: |
   %\VignetteIndexEntry{Vignette Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
 ---
 
+```{r global_options, include=FALSE}
+library(knitr)
+opts_chunk$set(eval=FALSE)
+```
+
+
 ```{r, echo = FALSE, message=FALSE}
 Sys.setenv(RETICULATE_PYTHON = "/home/alizaidi/anaconda3/envs/cntk-py35/bin/python")
 library(cntk)
