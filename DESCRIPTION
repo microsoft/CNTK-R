@@ -3,12 +3,12 @@ Type: Package
 Title: R Interface to the Microsoft Cognitive Toolkit (CNTK)
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Joe", "Davison", email = "t-jodavi@microsoft.com", role = c("aut", "cre")),
-    person("Ali", "Zaidi", email = "alizaidi@microsoft.com", role = c("aut")),
+    person("Ali", "Zaidi", email = "alizaidi@microsoft.com", role = c("aut", "cre")),
+    person("Joe", "Davison", email = "t-jodavi@microsoft.com", role = c("aut")),
     person("Microsoft", role = c("cph", "fnd"))
     )
-URL: https://github.com/Microsoft/CNTK, https://akzaidi.github.io/CNTK//index.html
-BugReports: https://github.com/Microsoft/CNTK/issues
+URL: https://github.com/Microsoft/CNTK-R, https://microsoft.github.io/CNTK-R//index.html
+BugReports: https://github.com/Microsoft/CNTK-R/issues
 Description: Provides an R interface to the CNTK deep-learning toolkit.
 Depends: R (>= 3.2.3)
 Encoding: UTF-8
