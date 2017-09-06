@@ -80,7 +80,7 @@
     <div class="page-header toc-ignore">
       <h1>CharacterLM</h1>
             
-            <h4 class="date">2017-08-31</h4>
+            <h4 class="date">2017-09-06</h4>
           </div>
 
     
@@ -95,49 +95,49 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hidden_dim &lt;-<span class="st"> </span><span class="dv">256</span>
 num_layers &lt;-<span class="st"> </span><span class="dv">2</span>
 minibatch_size &lt;-<span class="st"> </span><span class="dv">100</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">get_data &lt;-<span class="st"> </span><span class="cf">function</span>(p, minibatch_size, data, char_to_ix, vocab_dim) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">get_data &lt;-<span class="st"> </span>function(p, minibatch_size, data, char_to_ix, vocab_dim) {
   xi &lt;-<span class="st"> </span><span class="kw">c</span>()
   yi &lt;-<span class="st"> </span><span class="kw">c</span>()
   
   <span class="co"># the character LM predicts the next character so get sequences offset by 1</span>
-  <span class="cf">for</span> (i <span class="cf">in</span> p <span class="op">:</span><span class="st"> </span>p <span class="op">+</span><span class="st"> </span>minibatch_size) {
+  for (i in p :<span class="st"> </span>p +<span class="st"> </span>minibatch_size) {
     xi &lt;-<span class="st"> </span><span class="kw">c</span>(xi, char_to_ix[data[i]])
-    yi &lt;-<span class="st"> </span><span class="kw">c</span>(yi, char_to_ix[data[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>]])
+    yi &lt;-<span class="st"> </span><span class="kw">c</span>(yi, char_to_ix[data[i +<span class="st"> </span><span class="dv">1</span>]])
   }
   
   <span class="co"># produce one-hot vectors</span>
-  X &lt;-<span class="st"> </span><span class="kw">sparseMatrix</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(xi), xi) <span class="op">*</span><span class="st"> </span><span class="dv">1</span> <span class="co"># * 1 to make numeric</span>
-  Y &lt;-<span class="st"> </span><span class="kw">sparseMatrix</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(yi), yi) <span class="op">*</span><span class="st"> </span><span class="dv">1</span>
+  X &lt;-<span class="st"> </span><span class="kw">sparseMatrix</span>(<span class="dv">1</span>:<span class="kw">length</span>(xi), xi) *<span class="st"> </span><span class="dv">1</span> <span class="co"># * 1 to make numeric</span>
+  Y &lt;-<span class="st"> </span><span class="kw">sparseMatrix</span>(<span class="dv">1</span>:<span class="kw">length</span>(yi), yi) *<span class="st"> </span><span class="dv">1</span>
   
   <span class="co"># return a list of matrices for each of X (features) and Y (labels)</span>
   <span class="kw">list</span>(<span class="kw">list</span>(X), <span class="kw">list</span>(Y))
 }</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample &lt;-<span class="st"> </span><span class="cf">function</span>(root, ix_to_char, vocab_dim, char_to_ix, <span class="dt">prime_text =</span> <span class="st">''</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample &lt;-<span class="st"> </span>function(root, ix_to_char, vocab_dim, char_to_ix, <span class="dt">prime_text =</span> <span class="st">''</span>,
                    <span class="dt">use_hardmax =</span> <span class="ot">TRUE</span>, <span class="dt">length =</span> <span class="dv">100</span>, <span class="dt">temperature =</span> <span class="dv">1</span>) {
-  apply_temp &lt;-<span class="st"> </span><span class="cf">function</span>(p) {
-    p &lt;-<span class="st"> </span>p<span class="op">^</span>temperature
-    p <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(p)
+  apply_temp &lt;-<span class="st"> </span>function(p) {
+    p &lt;-<span class="st"> </span>p^temperature
+    p /<span class="st"> </span><span class="kw">sum</span>(p)
   }
-  sample_word &lt;-<span class="st"> </span><span class="cf">function</span>(p) {
-    <span class="cf">if</span> (use_hardmax) {
-      <span class="kw">return</span>(<span class="kw">exp</span>(p) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="kw">exp</span>(p)))
+  sample_word &lt;-<span class="st"> </span>function(p) {
+    if (use_hardmax) {
+      <span class="kw">return</span>(<span class="kw">exp</span>(p) /<span class="st"> </span><span class="kw">sum</span>(<span class="kw">exp</span>(p)))
     }
     <span class="co"># normalize probabilities and then take weighted sample</span>
-    p &lt;-<span class="st"> </span><span class="kw">exp</span>(p) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(<span class="kw">exp</span>(p))
+    p &lt;-<span class="st"> </span><span class="kw">exp</span>(p) /<span class="st"> </span><span class="kw">sum</span>(<span class="kw">exp</span>(p))
     p &lt;-<span class="st"> </span><span class="kw">apply_temp</span>(p)
-    <span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(vocab_dim))
+    <span class="kw">sample</span>(<span class="dv">1</span>:<span class="kw">length</span>(vocab_dim))
   }
   
   plen &lt;-<span class="st"> </span><span class="dv">1</span>
-  prime &lt;-<span class="st"> </span><span class="op">-</span><span class="dv">1</span>
+  prime &lt;-<span class="st"> </span>-<span class="dv">1</span>
   
   <span class="co"># start sequence with first input</span>
   x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">ncol =</span> vocab_dim)
-  <span class="cf">if</span> (prime_text <span class="op">!=</span><span class="st"> ''</span>) {
+  if (prime_text !=<span class="st"> ''</span>) {
     plen &lt;-<span class="st"> </span><span class="kw">length</span>(prime_text)
     prime &lt;-<span class="st"> </span>char_to_ix[prime_text[<span class="dv">0</span>]]
-  } <span class="cf">else</span> {
-    prime &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>vocab_dim)
+  } else {
+    prime &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:vocab_dim)
   }
   
   x[prime] &lt;-<span class="st"> </span><span class="dv">1</span>
@@ -147,14 +147,14 @@ minibatch_size &lt;-<span class="st"> </span><span class="dv">100</span></code><
   output &lt;-<span class="st"> </span><span class="kw">c</span>(prime)
   
   <span class="co"># loop through prime text</span>
-  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>plen) {
-    p &lt;-<span class="st"> </span>root <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/func_eval.html">func_eval</a></span>(arguments)
+  for (i in <span class="dv">1</span>:plen) {
+    p &lt;-<span class="st"> </span>root %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/func_eval.html">func_eval</a></span>(arguments)
     
     <span class="co"># reset</span>
     x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">ncol =</span> vocab_dim)
-    <span class="cf">if</span> (i <span class="op">&lt;</span><span class="st"> </span>plen <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) {
-      idx &lt;-<span class="st"> </span>char_to_ix[prime_text[i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>]]
-    } <span class="cf">else</span> {
+    if (i &lt;<span class="st"> </span>plen -<span class="st"> </span><span class="dv">1</span>) {
+      idx &lt;-<span class="st"> </span>char_to_ix[prime_text[i +<span class="st"> </span><span class="dv">1</span>]]
+    } else {
       idx &lt;-<span class="st"> </span><span class="kw">sample_word</span>(p)
     }
     
@@ -164,8 +164,8 @@ minibatch_size &lt;-<span class="st"> </span><span class="dv">100</span></code><
   }
   
   <span class="co"># loop through length of generated text, sampling along the way</span>
-  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>length<span class="op">-</span>plen) {
-    p &lt;-<span class="st"> </span>root <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">eval</span>(arguments)
+  for (i in <span class="dv">1</span>:length-plen) {
+    p &lt;-<span class="st"> </span>root %&gt;%<span class="st"> </span><span class="kw">eval</span>(arguments)
     idx &lt;-<span class="st"> </span><span class="kw">sample_word</span>(p)
     output &lt;-<span class="st"> </span><span class="kw">c</span>(output, idx)
     
@@ -176,15 +176,15 @@ minibatch_size &lt;-<span class="st"> </span><span class="dv">100</span></code><
   
   <span class="co"># convert numeric representation back to characters</span>
   chars &lt;-<span class="st"> </span><span class="kw">c</span>()
-  <span class="cf">for</span> (char <span class="cf">in</span> output) {
+  for (char in output) {
     chars &lt;-<span class="st"> </span><span class="kw">c</span>(chars, ix_to_char[<span class="kw">toString</span>(char)])
   }
   
   <span class="kw">paste</span>(chars, <span class="dt">collapse =</span> <span class="st">''</span>)
 }</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">load_data_and_vocab &lt;-<span class="st"> </span><span class="cf">function</span>(path) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">load_data_and_vocab &lt;-<span class="st"> </span>function(path) {
   <span class="co"># load data</span>
-  data &lt;-<span class="st"> </span><span class="kw">readChar</span>(path, <span class="kw">file.info</span>(path)<span class="op">$</span>size)[[<span class="dv">1</span>]]
+  data &lt;-<span class="st"> </span><span class="kw">readChar</span>(path, <span class="kw">file.info</span>(path)$size)[[<span class="dv">1</span>]]
   chars &lt;-<span class="st"> </span><span class="kw">unique</span>(data)
   data_size &lt;-<span class="st"> </span><span class="kw">length</span>(data)
   vocab_size &lt;-<span class="st"> </span><span class="kw">length</span>(chars)
@@ -192,7 +192,7 @@ minibatch_size &lt;-<span class="st"> </span><span class="dv">100</span></code><
   
   char_to_ix &lt;-<span class="st"> </span><span class="kw">list</span>()
   ix_to_char &lt;-<span class="st"> </span><span class="kw">list</span>()
-  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(chars)) {
+  for (i in <span class="dv">1</span>:<span class="kw">length</span>(chars)) {
     char_to_ix[[ chars[i] ]] &lt;-<span class="st"> </span>i
     ix_to_char[[ <span class="kw">toString</span>(i) ]] &lt;-<span class="st"> </span>chars[i]
   }
@@ -202,22 +202,22 @@ minibatch_size &lt;-<span class="st"> </span><span class="dv">100</span></code><
   
   <span class="kw">list</span>(data, char_to_ix, ix_to_char, data_size, vocab_size)
 }</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_model &lt;-<span class="st"> </span><span class="cf">function</span>(output_dim) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_model &lt;-<span class="st"> </span>function(output_dim) {
   <span class="kw"><a href="../reference/Sequential.html">Sequential</a></span>(
-    <span class="kw"><a href="../reference/For.html">For</a></span>(<span class="dv">1</span><span class="op">:</span>num_layers, <span class="cf">function</span>() {<span class="kw">c</span>(
+    <span class="kw"><a href="../reference/For.html">For</a></span>(<span class="dv">1</span>:num_layers, function() {<span class="kw">c</span>(
       <span class="kw"><a href="../reference/Sequential.html">Sequential</a></span>(<span class="kw"><a href="../reference/Stabilizer.html">Stabilizer</a></span>(), <span class="kw"><a href="../reference/Recurrence.html">Recurrence</a></span>(<span class="kw"><a href="../reference/LSTM.html">LSTM</a></span>(hidden_dim), <span class="dt">go_backwards =</span> <span class="ot">FALSE</span>))
     )}),
     <span class="kw"><a href="../reference/Dense.html">Dense</a></span>(output_dim)
   )
 }</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_inputs &lt;-<span class="st"> </span><span class="cf">function</span>(vocab_dim) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_inputs &lt;-<span class="st"> </span>function(vocab_dim) {
   input_seq_axis &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CNTKAxis.html">CNTKAxis</a></span>(<span class="st">'inputAxis'</span>)
   input_sequence &lt;-<span class="st"> </span><span class="kw"><a href="../reference/seq_input_variable.html">seq_input_variable</a></span>(<span class="dt">shape =</span> vocab_dim, <span class="dt">sequence_axis =</span> input_seq_axis, <span class="dt">name =</span> <span class="st">'input'</span>)
   label_sequence &lt;-<span class="st"> </span><span class="kw"><a href="../reference/seq_input_variable.html">seq_input_variable</a></span>(<span class="dt">shape =</span> vocab_dim, <span class="dt">sequence_axis =</span> input_seq_axis, <span class="dt">name =</span> <span class="st">'label'</span>)
   
   <span class="kw">list</span>(input_sequence, label_sequence)
 }</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train_lm &lt;-<span class="st"> </span><span class="cf">function</span>(training_file, epochs, max_num_minibatches) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train_lm &lt;-<span class="st"> </span>function(training_file, epochs, max_num_minibatches) {
   <span class="co"># load data and vocab</span>
   l &lt;-<span class="st"> </span><span class="kw">load_data_and_vocab</span>(training_file)
   data &lt;-<span class="st"> </span>l[<span class="dv">1</span>]
@@ -241,51 +241,51 @@ minibatch_size &lt;-<span class="st"> </span><span class="dv">100</span></code><
   <span class="co"># instantiate trainer object</span>
   lr_per_sample &lt;-<span class="st"> </span><span class="kw">learning_rate_schedule</span>(<span class="fl">0.001</span>, <span class="kw">UnitType</span>(<span class="st">'sample'</span>))
   momentum_time_constant &lt;-<span class="st"> </span><span class="kw">momentum_as_time_constant_schedule</span>(<span class="dv">1100</span>)
-  learner &lt;-<span class="st"> </span><span class="kw"><a href="../reference/learner_momentum_sgd.html">learner_momentum_sgd</a></span>(z<span class="op">$</span>parameters, lr_per_sample, momentum_time_constant,
+  learner &lt;-<span class="st"> </span><span class="kw"><a href="../reference/learner_momentum_sgd.html">learner_momentum_sgd</a></span>(z$parameters, lr_per_sample, momentum_time_constant,
                                   <span class="dt">gradient_clipping_threshold_per_sample =</span> <span class="dv">5</span>,
                                   <span class="dt">gradient_clipping_with_truncation =</span> <span class="ot">TRUE</span>)
   progress_printer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ProgressPrinter.html">ProgressPrinter</a></span>(<span class="dt">freq =</span> <span class="dv">100</span>, <span class="dt">tag =</span> <span class="st">'Training'</span>)
   trainer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Trainer.html">Trainer</a></span>(z, <span class="kw">c</span>(loss, error), learner, progress_printer)
   
   sample_freq &lt;-<span class="st"> </span><span class="dv">1000</span>
-  minibatches_per_epoch &lt;-<span class="st"> </span><span class="kw">min</span>(<span class="kw">floor</span>(data_size <span class="op">/</span><span class="st"> </span>minibatch_size),
-                               <span class="kw">floor</span>(max_num_minibatches <span class="op">/</span><span class="st"> </span>epochs))
+  minibatches_per_epoch &lt;-<span class="st"> </span><span class="kw">min</span>(<span class="kw">floor</span>(data_size /<span class="st"> </span>minibatch_size),
+                               <span class="kw">floor</span>(max_num_minibatches /<span class="st"> </span>epochs))
   
   <span class="co"># print out some useful training information</span>
   <span class="kw"><a href="../reference/log_number_of_parameters.html">log_number_of_parameters</a></span>(z)
   <span class="kw">sprintf</span>(<span class="st">"Running %d epochs with %d minibatches per epoch</span><span class="ch">\n</span><span class="st">"</span>, epochs, minibatches_per_epoch)
   
-  <span class="cf">for</span> (epoch <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>epochs) {
+  for (epoch in <span class="dv">1</span>:epochs) {
     <span class="co"># Specify the mapping of input variables in the model to actual minibatch data to be trained with</span>
     <span class="co"># If it's the start of the data, we specify that we are looking at a new sequence (True)</span>
     mask =<span class="st"> </span><span class="kw">c</span>(<span class="ot">TRUE</span>)
-    <span class="cf">for</span> (batch <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>minibatches_per_epoch) {
+    for (batch in <span class="dv">1</span>:minibatches_per_epoch) {
       minibatch &lt;-<span class="st"> </span><span class="kw">get_data</span>(batch, minibatch_size, data, char_to_ix, vocab_dim)
       arguments &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">list</span>(<span class="st">'input'</span> =<span class="st"> </span>minibatch[<span class="dv">1</span>], <span class="st">'label'</span> =<span class="st"> </span>minibatch[<span class="dv">2</span>]), mask)
       mask &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">FALSE</span>)
-      trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/train_minibatch.html">train_minibatch</a></span>(arguments)
+      trainer %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/train_minibatch.html">train_minibatch</a></span>(arguments)
       
-      global_minibatch &lt;-<span class="st"> </span>epoch <span class="op">*</span><span class="st"> </span>minibatches_per_epoch <span class="op">+</span><span class="st"> </span>batch
-      <span class="cf">if</span> (global_minibatch <span class="op">%%</span><span class="st"> </span>sample_freq <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) {
+      global_minibatch &lt;-<span class="st"> </span>epoch *<span class="st"> </span>minibatches_per_epoch +<span class="st"> </span>batch
+      if (global_minibatch %%<span class="st"> </span>sample_freq ==<span class="st"> </span><span class="dv">0</span>) {
         <span class="kw">print</span>(<span class="kw">sample</span>(z, ix_to_char, vocab_dim, char_to_ix))
       }
     }
     
-    model_filename &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">"models/shakespeare_epoch"</span>, <span class="kw">toString</span>(epoch <span class="op">+</span><span class="st"> </span><span class="dv">1</span>), <span class="st">".dnn"</span>, <span class="dt">sep =</span> <span class="st">""</span>)
+    model_filename &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">"models/shakespeare_epoch"</span>, <span class="kw">toString</span>(epoch +<span class="st"> </span><span class="dv">1</span>), <span class="st">".dnn"</span>, <span class="dt">sep =</span> <span class="st">""</span>)
     <span class="kw"><a href="../reference/func_save.html">func_save</a></span>(model_filename)
     <span class="kw">sprintf</span>(<span class="st">"Saved model to '%s'"</span>, model_filename)
   }
   
 }</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">load_and_sample &lt;-<span class="st"> </span><span class="cf">function</span>(model_filename, vocab_filename, <span class="dt">prime_text =</span> <span class="st">''</span>, <span class="dt">use_hardmax =</span> <span class="ot">FALSE</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">load_and_sample &lt;-<span class="st"> </span>function(model_filename, vocab_filename, <span class="dt">prime_text =</span> <span class="st">''</span>, <span class="dt">use_hardmax =</span> <span class="ot">FALSE</span>,
                             <span class="dt">length =</span> <span class="dv">1000</span>, <span class="dt">temperature =</span> <span class="fl">1.0</span>) {
   model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/func_load.html">func_load</a></span>(model_filename)
   
   <span class="co"># load vocab</span>
   char_to_ix &lt;-<span class="st"> </span><span class="kw">list</span>()
   ix_to_char &lt;-<span class="st"> </span><span class="kw">list</span>()
-  chars &lt;-<span class="st"> </span><span class="kw">strsplit</span>(<span class="kw">readChar</span>(vocab_filename, <span class="kw">file.info</span>(vocab_filename)<span class="op">$</span>size))[[<span class="dv">1</span>]]
-  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(chars)) {
+  chars &lt;-<span class="st"> </span><span class="kw">strsplit</span>(<span class="kw">readChar</span>(vocab_filename, <span class="kw">file.info</span>(vocab_filename)$size))[[<span class="dv">1</span>]]
+  for (i in <span class="dv">1</span>:<span class="kw">length</span>(chars)) {
     char_to_ix[chars[i]] &lt;-<span class="st"> </span>i
     ix_to_char[<span class="kw">toString</span>(i)] &lt;-<span class="st"> </span>chars[i]
   }
@@ -294,7 +294,7 @@ minibatch_size &lt;-<span class="st"> </span><span class="dv">100</span></code><
          <span class="dt">length =</span> length, <span class="dt">temperature =</span> temperature)
 }</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epochs &lt;-<span class="st"> </span><span class="dv">50</span>
-max_num_minibatches &lt;-<span class="st"> </span>.Machine<span class="op">$</span>integer.max
+max_num_minibatches &lt;-<span class="st"> </span>.Machine$integer.max
 <span class="kw">train_lm</span>(<span class="st">"../example-data/tinyshakespeare.txt"</span>, epochs, max_num_minibatches)
 
 model_path &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">"../models/shakespeare_epoch"</span>, <span class="kw">toString</span>(epochs), <span class="st">".dnn"</span>, <span class="dt">sep =</span> <span class="st">""</span>)

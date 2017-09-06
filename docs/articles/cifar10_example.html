@@ -80,7 +80,7 @@
     <div class="page-header toc-ignore">
       <h1>CIFAR-10 Image Classification with Convolutional Neural Networks and CNTK</h1>
             
-            <h4 class="date">2017-08-31</h4>
+            <h4 class="date">2017-09-06</h4>
           </div>
 
     
@@ -113,15 +113,15 @@
 <p>First you should download the CIFAR-10 dataset. In this vignette, we will download the data to a location in the <em>Examples/Image/DataSets/CIFAR-10</em> directory. This directory ships with the CNTK package, and includes a convenient Python script for downloading the CIFAR-10 data.</p>
 <p>To execute the script, follow the instructions <a href="https://github.com/Microsoft/CNTK/tree/master/Examples/Image/DataSets/CIFAR-10">here</a>.</p>
 <p>If you examine the data directory, you’ll see there are a few data files now populated. In particular, there is a file called <code>Train_cntk_text.txt</code> and <code>Test_cntk_text.txt</code>. If you peek at the format of these files, you’ll see that they are stored in a dense string format:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">alizaidi@azvm</span>:CNTK/Examples/Image/DataSets/CIFAR-10$ head Train_cntk_text.txt -n 1
-<span class="kw">|</span><span class="ex">labels</span> 0 0 0 0 0 0 1 0 0 0 <span class="kw">|</span><span class="ex">features</span> 59 43 50 68 98 119 139 145 149 149 131 125 142 144 137 129 137 134 124 139 139 133 136 139 152 163 168 159 158 158 152 148 16 0 18 51 88 120 128 127 126 116 106 101 105 113 109 112 119 109 105 125 127 122 131 124 121 131 132 133 133 1 (omitted)<span class="ex">...</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">alizaidi@azvm</span>:CNTK/Examples/Image/DataSets/CIFAR-10$ head Train_cntk_text.txt -n 1
+<span class="kw">|labels</span> 0 0 0 0 0 0 1 0 0 0 <span class="kw">|features</span> 59 43 50 68 98 119 139 145 149 149 131 125 142 144 137 129 137 134 124 139 139 133 136 139 152 163 168 159 158 158 152 148 16 0 18 51 88 120 128 127 126 116 106 101 105 113 109 112 119 109 105 125 127 122 131 124 121 131 132 133 133 1 (omitted)<span class="kw">...</span></code></pre></div>
 <p>The data is represented in a long string, with the labels represented using a one-hot representation and the features as a long string of pixel values of the image.</p>
 </div>
 <div id="define-minibatch-reader-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#define-minibatch-reader-functions" class="anchor"></a>Define Minibatch Reader Functions</h2>
 <p>Our first step is to define a function for reading in minibatches. We will define a function named <code>create_reader</code> which will be our entry point into the text dataset for training and evaluation. The function relies on CNTK’s text-format-reader, <code>CTFDeserializer</code> to read in the text data you imported earlier. The <code>CTFDeserializer</code> function takes two arguments, first argument is the path of the data you want to import, and the second is a dictionary mapping stream names to <code>StreamDef</code> objects. In our case, the stream names are the <code>features</code> and <code>labels</code> respectively. For training, we have the ability to make multiple random passes through our data, which can greatly improve training performance, while for evaluation we will make a single deterministic pass-through.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_reader &lt;-<span class="st"> </span><span class="cf">function</span>(path, is_training, input_dim, label_dim) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_reader &lt;-<span class="st"> </span>function(path, is_training, input_dim, label_dim) {
     <span class="kw"><a href="../reference/MinibatchSource.html">MinibatchSource</a></span>(<span class="kw"><a href="../reference/CTFDeserializer.html">CTFDeserializer</a></span>(path, <span class="kw"><a href="../reference/StreamDefs.html">StreamDefs</a></span>(
         <span class="dt">features =</span> <span class="kw"><a href="../reference/StreamDef.html">StreamDef</a></span>(<span class="dt">field =</span> <span class="st">"features"</span>, <span class="dt">shape =</span> input_dim),
         <span class="dt">labels =</span> <span class="kw"><a href="../reference/StreamDef.html">StreamDef</a></span>(<span class="dt">field =</span> <span class="st">"labels"</span>, <span class="dt">shape =</span> label_dim)
@@ -135,7 +135,7 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># ensure the path leads to the data where you have saved the CIFAR-10 images</span>
 data_path &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">"../../../"</span>,
                        <span class="st">"Examples"</span>, <span class="st">"Image"</span>, <span class="st">"DataSets"</span>, <span class="st">"CIFAR-10"</span>)
-<span class="cf">if</span> (<span class="op">!</span>(<span class="kw">file.exists</span>(data_path))) <span class="kw">message</span>(<span class="st">"Ensure your data_path is correct!"</span>)</code></pre></div>
+if (!(<span class="kw">file.exists</span>(data_path))) <span class="kw">message</span>(<span class="st">"Ensure your data_path is correct!"</span>)</code></pre></div>
 <pre><code>## Ensure your data_path is correct!</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epoch_size &lt;-<span class="st"> </span><span class="dv">50000</span>
 minibatch_size &lt;-<span class="st"> </span><span class="dv">64</span>
@@ -143,7 +143,7 @@ max_epochs &lt;-<span class="st"> </span><span class="dv">30</span>
 image_height &lt;-<span class="st"> </span><span class="dv">32</span>
 image_width &lt;-<span class="st"> </span><span class="dv">32</span>
 num_channels &lt;-<span class="st"> </span><span class="dv">3</span>
-input_dim &lt;-<span class="st"> </span>image_height <span class="op">*</span><span class="st"> </span>image_width <span class="op">*</span><span class="st"> </span>num_channels
+input_dim &lt;-<span class="st"> </span>image_height *<span class="st"> </span>image_width *<span class="st"> </span>num_channels
 num_output_classes &lt;-<span class="st"> </span><span class="dv">10</span></code></pre></div>
 <p>Next, we define the input variables denoting the features and label data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_var &lt;-<span class="st"> </span><span class="kw"><a href="../reference/op_input_variable.html">op_input_variable</a></span>(<span class="kw">c</span>(num_channels, image_height, image_width), 
@@ -156,7 +156,7 @@ normalized_input &lt;-<span class="st"> </span><span class="kw"><a href="../refe
 <p>Now we are ready to define our network architecture. The functions we use are all part of the CNTK <a href="https://www.cntk.ai/pythondocs/layerref.html">Layers</a> library. Please refer to those Python docs for a complete reference about these functions.</p>
 <p>In our case, we are going to define a convolutional neural network with four convolutional layers and two max-pooling layers.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Sequential.html">Sequential</a></span>(
-    <span class="kw"><a href="../reference/For.html">For</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="cf">function</span>() { 
+    <span class="kw"><a href="../reference/For.html">For</a></span>(<span class="dv">1</span>:<span class="dv">2</span>, function() { 
         <span class="kw">c</span>(
             <span class="kw"><a href="../reference/Convolution2D.html">Convolution2D</a></span>(<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">3</span>), <span class="dv">64</span>, op_relu, <span class="dt">pad =</span> <span class="ot">TRUE</span>),
             <span class="kw"><a href="../reference/Convolution2D.html">Convolution2D</a></span>(<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">3</span>), <span class="dv">64</span>, op_relu, <span class="dt">pad =</span> <span class="ot">TRUE</span>),
@@ -189,38 +189,38 @@ metric &lt;-<span class="st"> </span><span class="kw"><a href="../reference/clas
 <p>For optimization, we will use the minibatch SGD with momentum, for which we’ll define a learning rate and momentum schedules. We’ll also add <span class="math inline">\(\ell_1\)</span> and <span class="math inline">\(\ell_2\)</span> regularization penalty on each minibatch sample to increase regularization.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lr_per_sample &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="fl">0.0015625</span>), <span class="dv">10</span>), <span class="kw">rep</span>(<span class="kw">c</span>(<span class="fl">0.00046875</span>), <span class="dv">10</span>), <span class="fl">0.00015625</span>)
 lr_schedule &lt;-<span class="st"> </span><span class="kw">learning_rate_schedule</span>(<span class="fl">0.001</span>, <span class="kw">UnitType</span>(<span class="st">'sample'</span>), epoch_size)
-mm_time_constant &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="op">-</span>minibatch_size <span class="op">/</span><span class="st"> </span><span class="kw">log</span>(<span class="fl">0.9</span>))
+mm_time_constant &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">20</span>), -minibatch_size /<span class="st"> </span><span class="kw">log</span>(<span class="fl">0.9</span>))
 mm_schedule &lt;-<span class="st"> </span><span class="kw">momentum_as_time_constant_schedule</span>(mm_time_constant, epoch_size)
 l2_reg_weight &lt;-<span class="st"> </span><span class="fl">0.002</span></code></pre></div>
 <p>We can now define our training algorithm:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">learner &lt;-<span class="st"> </span><span class="kw"><a href="../reference/learner_momentum_sgd.html">learner_momentum_sgd</a></span>(z<span class="op">$</span>parameters, lr_schedule, mm_schedule,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">learner &lt;-<span class="st"> </span><span class="kw"><a href="../reference/learner_momentum_sgd.html">learner_momentum_sgd</a></span>(z$parameters, lr_schedule, mm_schedule,
                                 <span class="dt">l2_regularization_weight =</span> l2_reg_weight)
 progress_printer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ProgressPrinter.html">ProgressPrinter</a></span>(<span class="dt">tag =</span> <span class="st">'Training'</span>, <span class="dt">num_epochs =</span> max_epochs)
 trainer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Trainer.html">Trainer</a></span>(z, <span class="kw">c</span>(loss, metric), learner, progress_printer)</code></pre></div>
 <p>Create mapping from features to data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_map =<span class="st"> </span><span class="kw">list</span>(
-  <span class="st">"input"</span> =<span class="st"> </span>reader_train<span class="op">$</span>streams<span class="op">$</span>features,
-  <span class="st">"label"</span> =<span class="st"> </span>reader_train<span class="op">$</span>streams<span class="op">$</span>labels
+  <span class="st">"input"</span> =<span class="st"> </span>reader_train$streams$features,
+  <span class="st">"label"</span> =<span class="st"> </span>reader_train$streams$labels
 )</code></pre></div>
 <p>We now define a loop over which to train our network’s weights. To do so, at each minibatch we iterate over our MinibatchSource and test our evaluation function <code>test_minibatch</code> over each minibatch of data. Upon evaluation, we can backpropagate and update our model parameters using the <code>train_minibatch</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">loss_over_time &lt;-<span class="st"> </span><span class="kw">c</span>()
-<span class="cf">for</span> (epoch <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>max_epochs) {
+for (epoch in <span class="dv">1</span>:max_epochs) {
     sample_count &lt;-<span class="st"> </span><span class="dv">0</span>
-    <span class="cf">while</span> (sample_count <span class="op">&lt;</span><span class="st"> </span>epoch_size) {
-        current_minibatch &lt;-<span class="st"> </span><span class="kw">min</span>(minibatch_size, epoch_size <span class="op">-</span><span class="st"> </span>sample_count)
-        data &lt;-<span class="st"> </span>reader_train <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(current_minibatch, <span class="dt">input_map =</span> input_map)
-        result &lt;-<span class="st"> </span>trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/test_minibatch.html">test_minibatch</a></span>(data)
+    while (sample_count &lt;<span class="st"> </span>epoch_size) {
+        current_minibatch &lt;-<span class="st"> </span><span class="kw">min</span>(minibatch_size, epoch_size -<span class="st"> </span>sample_count)
+        data &lt;-<span class="st"> </span>reader_train %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(current_minibatch, <span class="dt">input_map =</span> input_map)
+        result &lt;-<span class="st"> </span>trainer %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/test_minibatch.html">test_minibatch</a></span>(data)
         loss_over_time &lt;-<span class="st"> </span><span class="kw">c</span>(loss_over_time, result)
-        trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/train_minibatch.html">train_minibatch</a></span>(data)
-        sample_count &lt;-<span class="st"> </span>sample_count <span class="op">+</span><span class="st"> </span>trainer<span class="op">$</span>previous_minibatch_sample_count
+        trainer %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/train_minibatch.html">train_minibatch</a></span>(data)
+        sample_count &lt;-<span class="st"> </span>sample_count +<span class="st"> </span>trainer$previous_minibatch_sample_count
     }
     <span class="kw"><a href="../reference/summarize_training_progress.html">summarize_training_progress</a></span>(trainer)
 }</code></pre></div>
 <p>We can visualize our training loss:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw">data.frame</span>(<span class="dt">loss =</span> loss_over_time, 
-                  <span class="dt">iterations =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(loss_over_time))) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> iterations, <span class="dt">y =</span> loss), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_minimal</a></span>() <span class="op">+</span>
+                  <span class="dt">iterations =</span> <span class="dv">1</span>:<span class="kw">length</span>(loss_over_time))) +<span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> iterations, <span class="dt">y =</span> loss), <span class="dt">alpha =</span> <span class="fl">0.5</span>) +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_minimal</a></span>() +
 <span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">"Training Loss"</span>)</code></pre></div>
 <p><img src="images/loss_cifar10.png" alt="Drawing" style="width: 600px;"></p>
 </div>
@@ -232,8 +232,8 @@ trainer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Tra
                              <span class="dt">is_training =</span>  <span class="ot">FALSE</span>,
                              input_dim, num_output_classes)
 input_map &lt;-<span class="st"> </span><span class="kw">list</span>(
-    <span class="st">"input"</span> =<span class="st"> </span>reader_test<span class="op">$</span>streams<span class="op">$</span>features,
-    <span class="st">"label"</span> =<span class="st"> </span>reader_test<span class="op">$</span>streams<span class="op">$</span>labels
+    <span class="st">"input"</span> =<span class="st"> </span>reader_test$streams$features,
+    <span class="st">"label"</span> =<span class="st"> </span>reader_test$streams$labels
 )</code></pre></div>
 <p>We can setup our evaluation parameters:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">epoch_size &lt;-<span class="st"> </span><span class="dv">2000</span>
@@ -244,16 +244,16 @@ sample_count &lt;-<span class="st"> </span><span class="dv">0</span>
 minibatch_index &lt;-<span class="st"> </span><span class="dv">0</span></code></pre></div>
 <p>And evaluate:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test_loss &lt;-<span class="st"> </span><span class="kw">c</span>()
-<span class="cf">while</span> (sample_count <span class="op">&lt;</span><span class="st"> </span>epoch_size) {
-    current_minibatch &lt;-<span class="st"> </span><span class="kw">min</span>(minibatch_size, epoch_size <span class="op">-</span><span class="st"> </span>sample_count)
-    data &lt;-<span class="st"> </span>reader_test <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(current_minibatch, <span class="dt">input_map =</span> input_map)
-    metric_numer &lt;-<span class="st">  </span>metric_numer <span class="op">+</span><span class="st"> </span>trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/test_minibatch.html">test_minibatch</a></span>(data) <span class="op">*</span><span class="st"> </span>current_minibatch
-    metric_denom &lt;-<span class="st">  </span>metric_denom <span class="op">+</span><span class="st"> </span>current_minibatch
-    sample_count &lt;-<span class="st">  </span>sample_count <span class="op">+</span><span class="st"> </span>data<span class="op">$</span>label<span class="op">$</span>num_samples
-    minibatch_index =<span class="st"> </span>minibatch_index <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+while (sample_count &lt;<span class="st"> </span>epoch_size) {
+    current_minibatch &lt;-<span class="st"> </span><span class="kw">min</span>(minibatch_size, epoch_size -<span class="st"> </span>sample_count)
+    data &lt;-<span class="st"> </span>reader_test %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(current_minibatch, <span class="dt">input_map =</span> input_map)
+    metric_numer &lt;-<span class="st">  </span>metric_numer +<span class="st"> </span>trainer %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/test_minibatch.html">test_minibatch</a></span>(data) *<span class="st"> </span>current_minibatch
+    metric_denom &lt;-<span class="st">  </span>metric_denom +<span class="st"> </span>current_minibatch
+    sample_count &lt;-<span class="st">  </span>sample_count +<span class="st"> </span>data$label$num_samples
+    minibatch_index =<span class="st"> </span>minibatch_index +<span class="st"> </span><span class="dv">1</span>
 }
 
-<span class="kw">sprintf</span>(<span class="st">"Final error: %g%%"</span>, metric_numer <span class="op">/</span><span class="st"> </span>metric_denom <span class="op">*</span><span class="st"> </span><span class="dv">100</span>)
+<span class="kw">sprintf</span>(<span class="st">"Final error: %g%%"</span>, metric_numer /<span class="st"> </span>metric_denom *<span class="st"> </span><span class="dv">100</span>)
 [<span class="dv">1</span>] <span class="st">"Final error: 21.25%"</span></code></pre></div>
 </div>
 </div>
