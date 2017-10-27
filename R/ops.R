@@ -1110,7 +1110,7 @@ op_reduce_prod <- function(x, axis = NULL, name = '') {
 op_reduce_sum <- function(x, axis = NULL, name = '') {
 	cntk$ops$reduce_sum(
 		x,
-		axis = to_int(x),
+		axis = to_int(axis),
 		name = name
 	)
 }
