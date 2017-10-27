@@ -80,7 +80,7 @@
     <div class="page-header toc-ignore">
       <h1>Convolutional Neural Netowrks with MNIST</h1>
             
-            <h4 class="date">2017-08-31</h4>
+            <h4 class="date">2017-09-06</h4>
           </div>
 
     
@@ -91,10 +91,10 @@
 <span class="kw">library</span>(magrittr)</code></pre></div>
 <p>Define input dimensions:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_dim_model &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">28</span>, <span class="dv">28</span>)    <span class="co"># images are 28 x 28 with 1 channel of color (gray)</span>
-input_dim &lt;-<span class="st"> </span><span class="dv">28</span><span class="op">*</span><span class="dv">28</span>                <span class="co"># used by readers to treat input data as a vector</span>
+input_dim &lt;-<span class="st"> </span><span class="dv">28</span>*<span class="dv">28</span>                <span class="co"># used by readers to treat input data as a vector</span>
 num_output_classes &lt;-<span class="st">  </span><span class="dv">10</span></code></pre></div>
 <p>Create reader function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_reader &lt;-<span class="st"> </span><span class="cf">function</span>(path, is_training, input_dim, num_label_classes) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_reader &lt;-<span class="st"> </span>function(path, is_training, input_dim, num_label_classes) {
   
   ctf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CTFDeserializer.html">CTFDeserializer</a></span>(path, <span class="kw"><a href="../reference/StreamDefs.html">StreamDefs</a></span>(
     <span class="dt">features =</span> <span class="kw"><a href="../reference/StreamDef.html">StreamDef</a></span>(<span class="dt">field =</span> <span class="st">"features"</span>, <span class="dt">shape =</span> input_dim,
@@ -111,9 +111,9 @@ num_output_classes &lt;-<span class="st">  </span><span class="dv">10</span></co
 <p>Install MNIST data first.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_dir &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">"../../../"</span>, <span class="st">"Examples"</span>, <span class="st">"Image"</span>,
                       <span class="st">"DataSets"</span>, <span class="st">"MNIST"</span>)
-<span class="cf">if</span> (<span class="op">!</span>(<span class="kw">file.exists</span>(<span class="kw">file.path</span>(data_dir, <span class="st">"Train-28x28_cntk_text.txt"</span>)))) {
+if (!(<span class="kw">file.exists</span>(<span class="kw">file.path</span>(data_dir, <span class="st">"Train-28x28_cntk_text.txt"</span>)))) {
   <span class="kw">message</span>(<span class="st">"Download MNIST data first!"</span>)
-} <span class="cf">else</span> {
+} else {
   
   train_file &lt;-<span class="st"> </span><span class="kw">file.path</span>(data_dir, <span class="st">"Train-28x28_cntk_text.txt"</span>)
   test_file &lt;-<span class="st"> </span><span class="kw">file.path</span>(data_dir, <span class="st">"Test-28x28_cntk_text.txt"</span>)
@@ -127,9 +127,9 @@ y &lt;-<span class="st"> </span><span class="kw"><a href="../reference/op_input_
 <div id="create-model" class="section level3">
 <h3 class="hasAnchor">
 <a href="#create-model" class="anchor"></a>Create model</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_model &lt;-<span class="st"> </span><span class="cf">function</span>(features) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_model &lt;-<span class="st"> </span>function(features) {
   
-  h &lt;-<span class="st"> </span><span class="kw"><a href="../reference/op_element_times.html">op_element_times</a></span>(<span class="dv">1</span><span class="op">/</span><span class="dv">255</span>, features)
+  h &lt;-<span class="st"> </span><span class="kw"><a href="../reference/op_element_times.html">op_element_times</a></span>(<span class="dv">1</span>/<span class="dv">255</span>, features)
   h &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Convolution2D.html">Convolution2D</a></span>(<span class="dt">filter_shape =</span> <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">5</span>),
                      <span class="dt">num_filters =</span> <span class="dv">8</span>,
                      <span class="dt">strides =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),
@@ -152,9 +152,9 @@ y &lt;-<span class="st"> </span><span class="kw"><a href="../reference/op_input_
 z &lt;-<span class="st"> </span><span class="kw">create_model</span>(x)
 
 <span class="kw">sprintf</span>(<span class="st">"Output shape of the first convolution layer: %s"</span>, 
-        <span class="kw">paste0</span>(z<span class="op">$</span>first_conv<span class="op">$</span>shape, <span class="dt">collapse =</span> <span class="st">", "</span>))
+        <span class="kw">paste0</span>(z$first_conv$shape, <span class="dt">collapse =</span> <span class="st">", "</span>))
 <span class="kw">sprintf</span>(<span class="st">"Bias value of the last dense layer: %s"</span>, 
-        <span class="kw">paste0</span>(z<span class="op">$</span>classify<span class="op">$</span>b<span class="op">$</span>value, <span class="dt">collapse =</span> <span class="st">", "</span>))
+        <span class="kw">paste0</span>(z$classify$b$value, <span class="dt">collapse =</span> <span class="st">", "</span>))
 
 <span class="kw"><a href="../reference/visualize_network.html">visualize_network</a></span>(z)</code></pre></div>
 </div>
@@ -162,7 +162,7 @@ z &lt;-<span class="st"> </span><span class="kw">create_model</span>(x)
 <div id="training" class="section level2">
 <h2 class="hasAnchor">
 <a href="#training" class="anchor"></a>Training</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_criterion_function &lt;-<span class="st"> </span><span class="cf">function</span>(model, labels) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">create_criterion_function &lt;-<span class="st"> </span>function(model, labels) {
   
   loss &lt;-<span class="st"> </span><span class="kw"><a href="../reference/loss_cross_entropy_with_softmax.html">loss_cross_entropy_with_softmax</a></span>(model, labels)
   errs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/classification_error.html">classification_error</a></span>(model, labels)
@@ -172,16 +172,16 @@ z &lt;-<span class="st"> </span><span class="kw">create_model</span>(x)
 
 
 
-print_training_progress &lt;-<span class="st"> </span><span class="cf">function</span>(trainer, mb, frequency, <span class="dt">verbose =</span> <span class="dv">1</span>) {
+print_training_progress &lt;-<span class="st"> </span>function(trainer, mb, frequency, <span class="dt">verbose =</span> <span class="dv">1</span>) {
  
   training_loss &lt;-<span class="st"> </span><span class="ot">NA</span>
   eval_error &lt;-<span class="st"> </span><span class="ot">NA</span>
-  <span class="cf">if</span> (mb <span class="op">%%</span><span class="st"> </span>frequency <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) {
-    training_loss &lt;-<span class="st"> </span>trainer<span class="op">$</span>previous_minibatch_loss_average
-    eval_error &lt;-<span class="st"> </span>trainer<span class="op">$</span>previous_minibatch_evaluation_average
-    <span class="cf">if</span> (verbose) {
+  if (mb %%<span class="st"> </span>frequency ==<span class="st"> </span><span class="dv">0</span>) {
+    training_loss &lt;-<span class="st"> </span>trainer$previous_minibatch_loss_average
+    eval_error &lt;-<span class="st"> </span>trainer$previous_minibatch_evaluation_average
+    if (verbose) {
       <span class="kw">sprintf</span>(<span class="st">"Minibatch: %s, Losss: %s, Error %s"</span>, 
-              mb, training_loss, eval_error<span class="op">*</span><span class="dv">100</span>)
+              mb, training_loss, eval_error*<span class="dv">100</span>)
     }
   }
   
@@ -192,7 +192,7 @@ print_training_progress &lt;-<span class="st"> </span><span class="cf">function<
 <div id="configure-training" class="section level2">
 <h2 class="hasAnchor">
 <a href="#configure-training" class="anchor"></a>Configure Training</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train_test &lt;-<span class="st"> </span><span class="cf">function</span>(train_reader, test_reader, model_func,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train_test &lt;-<span class="st"> </span>function(train_reader, test_reader, model_func,
                        <span class="dt">num_sweeps_to_train_with =</span> <span class="dv">10</span>) {
   
   model &lt;-<span class="st"> </span>model_func
@@ -202,59 +202,59 @@ print_training_progress &lt;-<span class="st"> </span><span class="cf">function<
   learning_rate &lt;-<span class="st"> </span><span class="fl">0.2</span>
   lr_schedule &lt;-<span class="st"> </span><span class="kw">learning_rate_schedule</span>(learning_rate, <span class="kw">UnitType</span>(<span class="st">"minibatch"</span>))
   
-  learner &lt;-<span class="st"> </span><span class="kw">learner_sgd</span>(z<span class="op">$</span>parameters, lr_schedule)
+  learner &lt;-<span class="st"> </span><span class="kw">learner_sgd</span>(z$parameters, lr_schedule)
   trainer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Trainer.html">Trainer</a></span>(z, loss_error, learner)
   
   minibatch_size &lt;-<span class="st"> </span><span class="dv">64</span>
-  num_samples_per_sweep &lt;-<span class="st"> </span><span class="dv">6</span><span class="op">*</span><span class="dv">10</span><span class="op">^</span><span class="dv">4</span>
-  num_minibatches_to_train &lt;-<span class="st"> </span>(num_samples_per_sweep <span class="op">*</span><span class="st"> </span>num_sweeps_to_train_with) <span class="op">/</span><span class="st"> </span>minibatch_size
+  num_samples_per_sweep &lt;-<span class="st"> </span><span class="dv">6</span>*<span class="dv">10</span>^<span class="dv">4</span>
+  num_minibatches_to_train &lt;-<span class="st"> </span>(num_samples_per_sweep *<span class="st"> </span>num_sweeps_to_train_with) /<span class="st"> </span>minibatch_size
   
-  input_map &lt;-<span class="st"> </span><span class="kw">dict</span>(<span class="st">"y"</span> =<span class="st"> </span>train_reader<span class="op">$</span>streams<span class="op">$</span>labels,
-                    <span class="st">"x"</span> =<span class="st"> </span>train_reader<span class="op">$</span>streams<span class="op">$</span>features)
+  input_map &lt;-<span class="st"> </span><span class="kw">dict</span>(<span class="st">"y"</span> =<span class="st"> </span>train_reader$streams$labels,
+                    <span class="st">"x"</span> =<span class="st"> </span>train_reader$streams$features)
   
   training_progress_output_freq &lt;-<span class="st"> </span><span class="dv">500</span>
   
   start &lt;-<span class="st"> </span><span class="kw">Sys.time</span>()
   
-  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">0</span><span class="op">:</span><span class="kw">ceiling</span>(num_minibatches_to_train)) {
+  for (i in <span class="dv">0</span>:<span class="kw">ceiling</span>(num_minibatches_to_train)) {
     
-    data &lt;-<span class="st"> </span>train_reader <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(minibatch_size, 
+    data &lt;-<span class="st"> </span>train_reader %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(minibatch_size, 
                                             <span class="dt">input_map =</span> input_map)
-    trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/train_minibatch.html">train_minibatch</a></span>(data)
+    trainer %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/train_minibatch.html">train_minibatch</a></span>(data)
     <span class="kw">print_training_progress</span>(trainer, i, training_progress_output_freq, <span class="dt">verbose =</span> <span class="dv">1</span>)
     
   }
   
-  <span class="kw">sprintf</span>(<span class="st">"Training took %s: "</span>, <span class="kw">Sys.time</span>() <span class="op">-</span><span class="st"> </span>start)
+  <span class="kw">sprintf</span>(<span class="st">"Training took %s: "</span>, <span class="kw">Sys.time</span>() -<span class="st"> </span>start)
   
   test_input_map &lt;-<span class="st"> </span><span class="kw">list</span>(
-    <span class="dt">y =</span> test_reader<span class="op">$</span>streams<span class="op">$</span>labels,
-    <span class="dt">x =</span> test_reader<span class="op">$</span>streams<span class="op">$</span>features
+    <span class="dt">y =</span> test_reader$streams$labels,
+    <span class="dt">x =</span> test_reader$streams$features
   )
   
   
   test_minibatch_size &lt;-<span class="st"> </span><span class="dv">512</span>
-  num_samples &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">4</span>
-  num_minibatches_to_test &lt;-<span class="st"> </span>num_samples <span class="op">/</span><span class="st"> </span>test_minibatch_size
+  num_samples &lt;-<span class="st"> </span><span class="dv">10</span>^<span class="dv">4</span>
+  num_minibatches_to_test &lt;-<span class="st"> </span>num_samples /<span class="st"> </span>test_minibatch_size
   
   test_result &lt;-<span class="st"> </span><span class="dv">0</span>
   
-  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ceiling</span>(num_minibatches_to_test)) {
+  for (i in <span class="dv">1</span>:<span class="kw">ceiling</span>(num_minibatches_to_test)) {
     
-    data &lt;-<span class="st"> </span>test_reader <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(test_minibatch_size, <span class="dt">input_map =</span> test_input_map)
-    eval_error &lt;-<span class="st"> </span>trainer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/test_minibatch.html">test_minibatch</a></span>(data)
-    test_result &lt;-<span class="st"> </span>test_result <span class="op">+</span><span class="st"> </span>eval_error
+    data &lt;-<span class="st"> </span>test_reader %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/next_minibatch.html">next_minibatch</a></span>(test_minibatch_size, <span class="dt">input_map =</span> test_input_map)
+    eval_error &lt;-<span class="st"> </span>trainer %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/test_minibatch.html">test_minibatch</a></span>(data)
+    test_result &lt;-<span class="st"> </span>test_result +<span class="st"> </span>eval_error
     
   }
  
-  <span class="kw">sprintf</span>(<span class="st">"Average test error %s: "</span>, test_result <span class="op">*</span><span class="st"> </span><span class="dv">100</span> <span class="op">/</span><span class="st"> </span>num_minibatches_to_test)
+  <span class="kw">sprintf</span>(<span class="st">"Average test error %s: "</span>, test_result *<span class="st"> </span><span class="dv">100</span> /<span class="st"> </span>num_minibatches_to_test)
    
 }</code></pre></div>
 </div>
 <div id="run-the-trainer-and-test-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#run-the-trainer-and-test-model" class="anchor"></a>Run the Trainer and Test Model</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">do_train_test &lt;-<span class="st"> </span><span class="cf">function</span>() {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">do_train_test &lt;-<span class="st"> </span>function() {
 
   reader_train &lt;-<span class="st"> </span><span class="kw">create_reader</span>(train_file, <span class="ot">TRUE</span>, input_dim, num_output_classes)
   reader_test &lt;-<span class="st"> </span><span class="kw">create_reader</span>(test_file, <span class="ot">FALSE</span>, input_dim, num_output_classes)

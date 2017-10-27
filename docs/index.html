@@ -77,34 +77,34 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-    <div id="r-interface-to-microsoft-cognitive-toolkit" class="section level1">
+    <div id="r-interface-to-the-microsoft-cognitive-toolkit" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#r-interface-to-microsoft-cognitive-toolkit" class="anchor"></a>R Interface to Microsoft Cognitive Toolkit</h1></div>
+<a href="#r-interface-to-the-microsoft-cognitive-toolkit" class="anchor"></a>R Interface to the Microsoft Cognitive Toolkit</h1></div>
 
-<p><code>CNTK-R</code> is an R package for CNTK using <a href="https://github.com/rstudio/reticulate">reticulate</a> to bind to Python interface. Since it binds directly to Python, the R interface can perform any operation the Python bindings can, including running on the GPU. See the <a href="https://microsoft.github.io/CNTK-R//articles/cifar10_example.html">CIFAR-10 image classification vignette</a> to see a basic example of training and eval of image classification the CIFAR-10 dataset.</p>
+<p><code>CNTK-R</code> is an R package for <a href="https://github.com/microsoft/cntk">CNTK</a>, which uses the <a href="https://github.com/rstudio/reticulate">reticulate package</a> to bind to CNTK’s Python API. Since it binds directly to Python, the R interface can perform any operation the Python bindings can, including running on the GPU. See the <a href="https://microsoft.github.io/CNTK-R//articles/cifar10_example.html">CIFAR-10 image classification vignette</a> to see a basic example of training and evaluation of image classification on the CIFAR-10 dataset.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>To use CNTK with R you’ll need to have the appropriate Python wheel for your system already installed. See <a href="https://docs.microsoft.com/en-us/cognitive-toolkit/Setup-CNTK-on-your-machine">CNTK’s documentation</a> for help setting up CNTK’s Python wheel on your system.</p>
 <p>Then run the following to install CNTK’s R package:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"Microsoft/CNTK-R"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">"Microsoft/CNTK-R"</span>)</code></pre></div>
 <p>You can also take a look at our article on <a href="https://microsoft.github.io/CNTK-R//articles/installation.html">setting up CNTK and CNTK-R on your machine</a>.</p>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<p>Documentation is still in the process, but the R package closely follows the CNTK Python interface where possible (<a href="https://www.cntk.ai/pythondocs/index.html">Python docs</a>). Here’s the basic rundown of the differences:</p>
+<p>Documentation is still a work in progress, but the R package closely follows the CNTK Python interface where possible (<a href="https://www.cntk.ai/pythondocs/index.html">Python docs</a>). Here’s the basic rundown of the differences:</p>
 <ol>
 <li>Properties are the same as in Python, and are accessed using the dollar sign ($) syntax:</li>
 </ol>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">l &lt;-<span class="st"> </span><span class="kw"><a href="reference/Learner.html">Learner</a></span>(parameters, lrschedule)
-l<span class="op">$</span>parameters <span class="co"># returns parameters associated with learner</span></code></pre></div>
+l$parameters <span class="co"># returns parameters associated with learner</span></code></pre></div>
 <ol>
 <li>Class methods are made global, and take the class object as the first property:</li>
 </ol>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">learner.update</span>(...) <span class="co"># Python</span>
 <span class="kw">update_learner</span>(learner, ...) <span class="co"># R equivalent</span>
-learner <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update_learner</span>(...) <span class="co"># R equivalent via pipe</span></code></pre></div>
+learner %&gt;%<span class="st"> </span><span class="kw">update_learner</span>(...) <span class="co"># R equivalent via pipe</span></code></pre></div>
 <p>As you can see, since class methods are made global, some renaming from the original python was necessary to avoid conflicts. See <a href="NAMESPACE" class="uri">NAMESPACE</a> or the <a href="R/">source code</a> for a list of all functions while documentation is being written.</p>
 <ol>
 <li>R matrices are automatically converted to and from NumPy array’s with float32 dtype.</li>

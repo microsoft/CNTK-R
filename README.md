@@ -1,12 +1,9 @@
-# R Interface to Microsoft Cognitive Toolkit
+# R Interface to the Microsoft Cognitive Toolkit
 
 Please take a look at the package website [microsoft.github.io/CNTK-R](https://microsoft.github.io/CNTK-R//index.html) for complete documentation.
 
-`CNTK-R` is an R package for CNTK using [reticulate](https://github.com/rstudio/reticulate) to bind to Python interface. Since it
-binds directly to Python, the R interface can perform any operation the Python
-bindings can, including running on the GPU. See the
-[CIFAR-10 image classification vignette](https://microsoft.github.io/CNTK-R//articles/cifar10_example.html) to see a basic example of training
-and eval of image classification the CIFAR-10 dataset.
+`CNTK-R` is an R package for [CNTK](https://github.com/microsoft/cntk), which uses the [reticulate package](https://github.com/rstudio/reticulate) to bind to CNTK's Python API. Since it binds directly to Python, the R interface can perform any operation the Python
+bindings can, including running on the GPU. See the [CIFAR-10 image classification vignette](https://microsoft.github.io/CNTK-R//articles/cifar10_example.html) to see a basic example of training and evaluation of image classification on the CIFAR-10 dataset.
 
 ## Installation
 
@@ -23,10 +20,8 @@ You can also take a look at our article on [setting up CNTK and CNTK-R on your m
 
 ## Usage
 
-Documentation is still in the process, but the R package closely follows the
-CNTK Python interface where possible
-([Python docs](https://www.cntk.ai/pythondocs/index.html)). Here's the basic
-rundown of the differences:
+Documentation is still a work in progress, but the R package closely follows the
+CNTK Python interface where possible ([Python docs](https://www.cntk.ai/pythondocs/index.html)). Here's the basic rundown of the differences:
 
 1. Properties are the same as in Python, and are accessed using the dollar sign
    ($) syntax:
@@ -44,9 +39,7 @@ learner.update(...) # Python
 update_learner(learner, ...) # R equivalent
 learner %>% update_learner(...) # R equivalent via pipe
 ```
-As you can see, since class methods are made global, some renaming from the
-original python was necessary to avoid conflicts. See [NAMESPACE](NAMESPACE) or
-the [source code](R/) for a list of all functions while documentation is being
+As you can see, since class methods are made global, some renaming from the original python was necessary to avoid conflicts. See [NAMESPACE](NAMESPACE) or the [source code](R/) for a list of all functions while documentation is being
 written.
 
 3. R matrices are automatically converted to and from NumPy array's with
