@@ -1,0 +1,290 @@
+---
+title: "CharacterLM"
+output:
+  rmarkdown::html_vignette:
+    fig_caption: yes
+  html_document: default
+date: '`r Sys.Date()`'
+vignette: |
+  %\VignetteIndexEntry{Vignette Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+---
+
+```{r global_options, include=FALSE}
+library(knitr)
+opts_chunk$set(eval=FALSE)
+```
+
+
+```{r, echo = FALSE, message=FALSE}
+Sys.setenv(RETICULATE_PYTHON = "/home/alizaidi/anaconda3/envs/cntk-py35/bin/python")
+library(cntk)
+library(magrittr)
+library(Matrix)
+```
+
+## Goals and Overview
+
+This example demonstrates how to build a neural character language model with CNTK using regular plaintext data.
+
+A neural language model uses a recurrent neural network to predict words (or characters) with a richer context than traditional n-gram models allow. In this implementation, a character is run through an LSTM and the output is then put through a fully-connected layer to predict the next output character. The model can learn to be extremely expressive as the context is progressively built-up with each letter run through the RNN. For even more expressiveness, we allow a stack of LSTMs where the output of each layer is put through the next layer as its input.
+
+This example is inspired by Andrej Karpathy's blog post, ["The Unreasonable Effectiveness of Recurrent Neural Networks"](http://karpathy.github.io/2015/05/21/rnn-effectiveness/) and his accompanying code at https://github.com/karpathy/char-rnn. This example allows you to achieve similar results to those displayed in Karpathy's blog, but with the packed-sequence training efficiency that CNTK allows.
+
+```{r}
+hidden_dim <- 256
+num_layers <- 2
+minibatch_size <- 100
+```
+
+```{r}
+get_data <- function(p, minibatch_size, data, char_to_ix, vocab_dim) {
+  xi <- c()
+  yi <- c()
+  
+  # the character LM predicts the next character so get sequences offset by 1
+  for (i in p : p + minibatch_size) {
+    xi <- c(xi, char_to_ix[data[i]])
+    yi <- c(yi, char_to_ix[data[i + 1]])
+  }
+  
+  # produce one-hot vectors
+  X <- sparseMatrix(1:length(xi), xi) * 1 # * 1 to make numeric
+  Y <- sparseMatrix(1:length(yi), yi) * 1
+  
+  # return a list of matrices for each of X (features) and Y (labels)
+  list(list(X), list(Y))
+}
+```
+
+```{r}
+sample <- function(root, ix_to_char, vocab_dim, char_to_ix, prime_text = '',
+                   use_hardmax = TRUE, length = 100, temperature = 1) {
+  apply_temp <- function(p) {
+    p <- p^temperature
+    p / sum(p)
+  }
+  sample_word <- function(p) {
+    if (use_hardmax) {
+      return(exp(p) / sum(exp(p)))
+    }
+    # normalize probabilities and then take weighted sample
+    p <- exp(p) / sum(exp(p))
+    p <- apply_temp(p)
+    sample(1:length(vocab_dim))
+  }
+  
+  plen <- 1
+  prime <- -1
+  
+  # start sequence with first input
+  x <- matrix(0, ncol = vocab_dim)
+  if (prime_text != '') {
+    plen <- length(prime_text)
+    prime <- char_to_ix[prime_text[0]]
+  } else {
+    prime <- sample(1:vocab_dim)
+  }
+  
+  x[prime] <- 1
+  arguments <- list(list(x), list(TRUE))
+  
+  # setup a vector for the output characters and add the initial prime text
+  output <- c(prime)
+  
+  # loop through prime text
+  for (i in 1:plen) {
+    p <- root %>% func_eval(arguments)
+    
+    # reset
+    x <- matrix(0, ncol = vocab_dim)
+    if (i < plen - 1) {
+      idx <- char_to_ix[prime_text[i + 1]]
+    } else {
+      idx <- sample_word(p)
+    }
+    
+    output <- c(output, idx)
+    x[idx] <- 1
+    arguments = list(list(x), list(TRUE))
+  }
+  
+  # loop through length of generated text, sampling along the way
+  for (i in 1:length-plen) {
+    p <- root %>% eval(arguments)
+    idx <- sample_word(p)
+    output <- c(output, idx)
+    
+    x <- matrix(0, ncol = vocab_dim)
+    x[idx] <- 1
+    arguments <- list(list(x), list(FALSE))
+  }
+  
+  # convert numeric representation back to characters
+  chars <- c()
+  for (char in output) {
+    chars <- c(chars, ix_to_char[toString(char)])
+  }
+  
+  paste(chars, collapse = '')
+}
+```
+
+```{r}
+load_data_and_vocab <- function(path) {
+  # load data
+  data <- readChar(path, file.info(path)$size)[[1]]
+  chars <- unique(data)
+  data_size <- length(data)
+  vocab_size <- length(chars)
+  sprintf("data has %d characters, %d unique", data_size, vocab_size)
+  
+  char_to_ix <- list()
+  ix_to_char <- list()
+  for (i in 1:length(chars)) {
+    char_to_ix[[ chars[i] ]] <- i
+    ix_to_char[[ toString(i) ]] <- chars[i]
+  }
+  
+  # write vocab for future use
+  write(chars, paste(path, ".vocab", sep = ''))
+  
+  list(data, char_to_ix, ix_to_char, data_size, vocab_size)
+}
+```
+
+
+```{r}
+create_model <- function(output_dim) {
+  Sequential(
+    For(1:num_layers, function() {c(
+      Sequential(Stabilizer(), Recurrence(LSTM(hidden_dim), go_backwards = FALSE))
+    )}),
+    Dense(output_dim)
+  )
+}
+```
+
+```{r}
+create_inputs <- function(vocab_dim) {
+  input_seq_axis <- CNTKAxis('inputAxis')
+  input_sequence <- seq_input_variable(shape = vocab_dim, sequence_axis = input_seq_axis, name = 'input')
+  label_sequence <- seq_input_variable(shape = vocab_dim, sequence_axis = input_seq_axis, name = 'label')
+  
+  list(input_sequence, label_sequence)
+}
+```
+
+```{r}
+train_lm <- function(training_file, epochs, max_num_minibatches) {
+  # load data and vocab
+  l <- load_data_and_vocab(training_file)
+  data <- l[1]
+  char_to_ix <- l[2]
+  data_size <- l[3]
+  vocab_dim <- l[4]
+  
+  # model the source targets inputs to the model
+  sequences <- create_inputs(vocab_dim)
+  input_sequence <- sequences[1]
+  label_sequence <- sequences[2]
+  
+  # create the model and apply to input sequence
+  model <- create_model(vocab_dim)
+  z <- model(input_sequence)
+  
+  # setup criteria
+  loss <- loss_cross_entropy_with_softmax(z, label_sequence)
+  error <- classification_error(z, label_sequence)
+  
+  # instantiate trainer object
+  lr_per_sample <- learning_rate_schedule(0.001, UnitType('sample'))
+  momentum_time_constant <- momentum_as_time_constant_schedule(1100)
+  learner <- learner_momentum_sgd(z$parameters, lr_per_sample, momentum_time_constant,
+                                  gradient_clipping_threshold_per_sample = 5,
+                                  gradient_clipping_with_truncation = TRUE)
+  progress_printer <- ProgressPrinter(freq = 100, tag = 'Training')
+  trainer <- Trainer(z, c(loss, error), learner, progress_printer)
+  
+  sample_freq <- 1000
+  minibatches_per_epoch <- min(floor(data_size / minibatch_size),
+                               floor(max_num_minibatches / epochs))
+  
+  # print out some useful training information
+  log_number_of_parameters(z)
+  sprintf("Running %d epochs with %d minibatches per epoch\n", epochs, minibatches_per_epoch)
+  
+  for (epoch in 1:epochs) {
+    # Specify the mapping of input variables in the model to actual minibatch data to be trained with
+    # If it's the start of the data, we specify that we are looking at a new sequence (True)
+    mask = c(TRUE)
+    for (batch in 1:minibatches_per_epoch) {
+      minibatch <- get_data(batch, minibatch_size, data, char_to_ix, vocab_dim)
+      arguments <- list(list('input' = minibatch[1], 'label' = minibatch[2]), mask)
+      mask <- c(FALSE)
+      trainer %>% train_minibatch(arguments)
+      
+      global_minibatch <- epoch * minibatches_per_epoch + batch
+      if (global_minibatch %% sample_freq == 0) {
+        print(sample(z, ix_to_char, vocab_dim, char_to_ix))
+      }
+    }
+    
+    model_filename <- paste("models/shakespeare_epoch", toString(epoch + 1), ".dnn", sep = "")
+    func_save(model_filename)
+    sprintf("Saved model to '%s'", model_filename)
+  }
+  
+}
+```
+
+```{r}
+load_and_sample <- function(model_filename, vocab_filename, prime_text = '', use_hardmax = FALSE,
+                            length = 1000, temperature = 1.0) {
+  model <- func_load(model_filename)
+  
+  # load vocab
+  char_to_ix <- list()
+  ix_to_char <- list()
+  chars <- strsplit(readChar(vocab_filename, file.info(vocab_filename)$size))[[1]]
+  for (i in 1:length(chars)) {
+    char_to_ix[chars[i]] <- i
+    ix_to_char[toString(i)] <- chars[i]
+  }
+  
+  sample(model, ix_to_char, length(chars), char_to_ix, prime_text = prime_text, use_hardmax = use_hardmax,
+         length = length, temperature = temperature)
+}
+```
+
+```{r}
+epochs <- 50
+max_num_minibatches <- .Machine$integer.max
+train_lm("../example-data/tinyshakespeare.txt", epochs, max_num_minibatches)
+
+model_path <- paste("../models/shakespeare_epoch", toString(epochs), ".dnn", sep = "")
+vocab_path <- "../example-data/tinyshakespeare.txt.vocab"
+
+output <- load_and_sample(model_path, vocab_path, prime_text = 'T', use_hardmax = FALSE,
+                          length = 100, temperature = 0.95)
+
+write('output.txt', output)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
