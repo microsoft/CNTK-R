@@ -39,8 +39,7 @@ learner.update(...) # Python
 update_learner(learner, ...) # R equivalent
 learner %>% update_learner(...) # R equivalent via pipe
 ```
-As you can see, since class methods are made global, some renaming from the original python was necessary to avoid conflicts. See [NAMESPACE](NAMESPACE) or the [source code](R/) for a list of all functions while documentation is being
-written.
+Since class methods are made global, some renaming from the original python API was necessary to avoid conflicts. See the [documentation](https://microsoft.github.io/CNTK-R//index.html) for a list of all available functions.
 
 3. R matrices are automatically converted to and from NumPy array's with
    float32 dtype.
